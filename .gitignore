@@ -19,6 +19,10 @@ context/kaggle/topics/
 context/kaggle/notebooks/
 context/kaggle/curated/
 research_loop/runs/
+research_loop/ladder/
 submissions/packages/
 *.html
+
+# OS
+.DS_Store
 

@@ -1,1 +1,50 @@
 experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	win_rate	ci95_low	ci95_high	status	description
+20260805-H001-quick	H-001	candidates/h001_mega_lucario	random,first	40	14	26	0	0	0.35	0.2213	0.5049	measured	generic scorer on public Mega Lucario deck
+20260805-H004-quick	H-004	candidates/h004_alakazam	random,first,candidates/h001_mega_lucario	60	13	47	0	0	0.2167	0.1312	0.3362	measured	generic scorer on public best-5th Alakazam deck
+20260805-H003-quick	H-003	candidates/h003_dragapult	random,first,candidates/h001_mega_lucario	60	16	44	0	0	0.2667	0.1713	0.3901	measured	generic scorer on public Dragapult deck
+20260805-H002-quick	H-002	candidates/h002_anti_crustle	random,first,candidates/h001_mega_lucario	60	22	38	0	0	0.3667	0.2562	0.4932	measured	non-ex-heavy Lucario variant with Crustle-aware active scoring
+20260805-H005-quick	H-005	candidates/h005_library_out	random,first,candidates/h001_mega_lucario	60	27	33	0	0	0.45	0.3309	0.5751	measured	generic scorer on public max-Elo-1208 library-out deck
+20260805-H000-quick	H-000	.	random,first	40	4	36	0	0	0.1	0.0396	0.2305	measured	root random baseline
+20260805-H006R-01	H-006R	candidates/h006r_majkel_lucario	candidates/h001_mega_lucario,candidates/h005_library_out	200	114	86	0	0	0.57	0.5007	0.6367	measured	
+20260805-H006R-02	H-006R	candidates/h006r_majkel_lucario	candidates/h001_mega_lucario,candidates/h005_library_out	200	109	91	0	0	0.545	0.4758	0.6125	measured	
+20260805-H006R-03	H-006R	candidates/h006r_majkel_lucario	candidates/h001_mega_lucario,candidates/h005_library_out	200	131	69	0	0	0.655	0.5868	0.7174	measured	
+20260805-H006R-04	H-006R	candidates/h006r_majkel_lucario	candidates/h001_mega_lucario,candidates/h005_library_out	200	146	54	0	0	0.73	0.6646	0.7868	measured	
+20260805-H006R-05	H-006R	candidates/h006r_majkel_lucario	candidates/opp_grimmsnarl,candidates/opp_meta2,random,first	400	311	89	0	0	0.7775	0.7342	0.8155	measured	
+20260805-H006R-06	H-006R	candidates/h006r_majkel_lucario	candidates/h001_mega_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	385	114	1	0	0.77	0.7311	0.8047	measured	
+20260805-H010-01	H-010	candidates/h010_lopunny_hybrid	candidates/h006r_majkel_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	283	217	0	0	0.566	0.5222	0.6088	measured	
+20260805-H010-02	H-010	candidates/h010_lopunny_pure	candidates/h006r_majkel_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	307	192	1	0	0.614	0.5706	0.6556	measured	
+20260805-H010-03	H-010	candidates/h010_lopunny_pure	candidates/h006r_majkel_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	321	178	1	0	0.642	0.599	0.6828	measured	
+20260806-H011-01	H-011	candidates/h011_search_lopunny	candidates/h006r_majkel_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	326	172	2	0	0.652	0.6092	0.6925	measured	
+20260806-H011-02	H-011	candidates/h011_search_lopunny	candidates/h006r_majkel_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	325	174	1	0	0.65	0.6072	0.6905	measured	
+20260806-H011-03	H-011	candidates/h011_search_lopunny	candidates/h006r_majkel_lucario,candidates/h005_library_out,candidates/opp_grimmsnarl,candidates/opp_meta2,first	500	336	163	1	0	0.672	0.6297	0.7117	measured	
+20260806-H012-01	H-012	candidates/h012_search_lucario	candidates/h006r_majkel_lucario,candidates/h010_lopunny_pure,candidates/h011_search_lopunny,candidates/opp_grimmsnarl,candidates/opp_meta2	500	395	105	0	0	0.79	0.7522	0.8234	measured	
+20260806-H013-01	H-013	candidates/h013_search_scaled	candidates/h011_search_lopunny,candidates/h010_lopunny_pure,candidates/opp_grimmsnarl,candidates/opp_meta2	400	358	41	1	0	0.895	0.8611	0.9214	measured	
+20260806-H014-01	H-014	candidates/h014_search_value	candidates/h006r_majkel_lucario,candidates/h011_search_lopunny,candidates/h010_lopunny_pure,candidates/opp_grimmsnarl,candidates/opp_meta2	500	418	81	1	0	0.836	0.801	0.8659	measured	
+20260807-H017-01	H-017	candidates/h017_subsearch	candidates/h016_retrain	60	32	28	0	0	0.5333	0.4089	0.6537	measured	subselect search + overage-adaptive budget vs H-016
+20260807-H017-02a	H-017	candidates/h016_retrain	candidates/opp_meta0	40	34	6	0	0	0.85	0.7093	0.9294	measured	baseline: h016 vs meta0-deck generic bot
+20260807-H017-02b	H-017	candidates/h017_subsearch	candidates/opp_meta0	40	36	4	0	0	0.9	0.7695	0.9604	measured	h017 vs meta0-deck generic bot
+20260807-H017-03a	H-017	candidates/h016_retrain	candidates/opp_meta0d	40	21	18	1	0	0.525	0.375	0.6706	measured	baseline: h016 vs meta0 distilled bot
+20260807-H017-03b	H-017	candidates/h017_subsearch	candidates/opp_meta0d	40	19	21	0	0	0.475	0.3294	0.625	measured	h017 vs meta0 distilled bot
+20260807-H017-04	H-017	candidates/h017_subsearch	candidates/opp_meta0d	40	27	13	0	0	0.675	0.5202	0.7992	measured	h017b 3-horizon leaf (self rollout) vs meta0 distilled bot
+20260807-H017-05	H-017	candidates/h017_subsearch	candidates/h016_retrain	40	20	20	0	0	0.5	0.352	0.648	measured	h017b mirror regression check vs h016
+20260807-H017-07	H-017	candidates/h017d_reply	candidates/opp_meta0d	40	30	10	0	0	0.75	0.5981	0.8581	measured	h017d reply-table _greedy_reply vs meta0 distilled bot
+20260807-H017-06	H-017	candidates/h017c_budget	candidates/opp_meta0d	40	27	13	0	0	0.675	0.5202	0.7992	measured	h017c budget scale-up (8s/4800n) vs meta0 distilled bot
+20260807-H017-09	H-017	candidates/h017e_selfroll	candidates/opp_meta0d	40	26	14	0	0	0.65	0.4951	0.7787	measured	h017e distilled self-rollout + reply table vs meta0 distilled bot
+20260807-H017-08	H-017	candidates/h017d_reply	candidates/h017_subsearch	40	18	22	0	0	0.45	0.3071	0.6017	measured	h017d reply-table mirror regression vs h017b
+20260807-H017-10	H-017	candidates/h017f_reply_budget	candidates/opp_meta0d	40	32	8	0	0	0.8	0.6524	0.895	measured	h017f reply-table + budget 8s/4800n vs meta0 distilled bot
+20260807-H017-11	H-017	candidates/h017f_reply_budget	candidates/h017d_reply	40	15	25	0	0	0.375	0.2422	0.5297	measured	h017f mirror regression vs h017d
+20260807-H017-12	H-017	candidates/h017d_reply	candidates/opp_meta2,candidates/opp_grimmsnarl	80	79	1	0	0	0.9875	0.9325	0.9978	measured	h017d robustness vs meta2/grimmsnarl archetype bots
+20260807-H017-13	H-017	candidates/h017g_reply_mid	candidates/opp_meta0d	40	23	17	0	0	0.575	0.4219	0.7149	measured	h017g reply + mid budget 6s/3000n vs meta0 distilled bot
+20260808-H019-01	H-019	candidates/h019_lethal_prize	candidates/opp_meta0d	40	26	14	0	0	0.65	0.4951	0.7787	measured	INVALID(mid-run code edit) h019 v0 vs meta0d
+20260808-H019-02	H-019	candidates/h019_lethal_prize	candidates/opp_meta0d	40	25	15	0	0	0.625	0.4703	0.7578	measured	h019 final(sim-winner lethal commit + prize inference) vs meta0d, baseline h017d 75%
+20260808-H019-03	H-019	candidates/h019_lethal_prize	candidates/h017d_reply	40	25	15	0	0	0.625	0.4703	0.7578	measured	h019 mirror regression vs h017d (gate >=45%; 주의: 실행 중 prize-fix 편집 혼입, 참고치)
+20260808-H020-02	H-020	candidates/h020_combo	candidates/opp_meta0d	40	28	12	0	0	0.7	0.5457	0.8193	measured	h020 vs meta0d, reference h017d 75% / h019 62.5%
+20260808-H020-01	H-020	candidates/h020_combo	candidates/h017d_reply	40	16	24	0	0	0.4	0.2635	0.554	measured	h020(h019 code + 4day data refresh) sparring vs h017d, gate >=55%
+20260808-H020-03	H-020	candidates/h020_combo	candidates/h019_lethal_prize	40	23	17	0	0	0.575	0.4219	0.7149	measured	h020 vs h019 head-to-head slot decision
+20260809-H021-01	H-021	candidates/h021b_deckvalue	candidates/h020_combo	40	8	32	0	0	0.2	0.105	0.3476	measured	h021b deck-specific value (lucario-only 5d, AUC .7714) sparring vs h020 (gate >=55%)
+20260809-H021-02	H-021	candidates/h021_refresh	candidates/h020_combo	40	16	24	0	0	0.4	0.2635	0.554	measured	h021_refresh (5-day multi-dir value + redistill) sparring vs h020 (gate >=55%)
+20260809-H021-03	H-021	candidates/h020_combo	candidates/opp_meta2,candidates/opp_grimmsnarl	80	79	1	0	0	0.9875	0.9325	0.9978	measured	h020 robustness sweep vs meta2/grimmsnarl archetype bots (writeup evidence, cf. h017d 79-1)
+20260809-H022-01	H-022	candidates/h022_alak_fork	candidates/h020_combo	40	27	13	0	0	0.675	0.5202	0.7992	measured	Rozen V10 vanilla fork (Dragapult build) sparring vs h020 — public-950 baseline local calibration
+20260809-H023-01	H-023	candidates/h023_tuned	candidates/h022_alak_fork	40	15	25	0	0	0.375	0.2422	0.5297	measured	CEM-tuned weights (gen5 best .833 pool) vs vanilla fork head-to-head (gate >=55%)
+20260809-H023-02	H-023	candidates/h023_tuned	candidates/h022_alak_fork	40	17	23	0	0	0.425	0.2851	0.5781	measured	tuner v2 best (fresh-sample elite re-eval, .625 re-eval) vs vanilla gate >=55%
+20260809-H024-01	H-024	candidates/h024_lethal_graft	candidates/h022_alak_fork	40	23	17	0	0	0.575	0.4219	0.7149	measured	lethal-commit graft on fork policy vs vanilla fork (gate >=55%); probes trigger at prize<=3, budget 2.6s

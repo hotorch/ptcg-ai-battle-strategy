@@ -8,6 +8,8 @@ import json
 import math
 import os
 import sys
+import time
+from concurrent.futures import ProcessPoolExecutor
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
@@ -17,8 +19,9 @@ from kaggle_environments import make
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "research_loop" / "runs"
 RESULTS = ROOT / "research_loop" / "results.tsv"
-BUNDLES = {"smoke": 1, "quick": 10, "full": 50}
+BUNDLES = {"smoke": 1, "quick": 10, "full": 50, "deep": 150}
 BUILTINS = {"random", "first"}
+DEFAULT_WORKERS = max(1, min(8, (os.cpu_count() or 2) - 2))
 
 
 def resolve_agent(value: str) -> str:
@@ -33,7 +36,7 @@ def resolve_agent(value: str) -> str:
         raise ValueError(f"agent not found: {value}")
     if not (path.parent / "deck.csv").is_file():
         raise ValueError(f"deck.csv not found beside: {path}")
-    return str(path.resolve())
+    return str(path.absolute())  # Preserve candidate-local deck.csv beside symlinked agents.
 
 
 @contextmanager
@@ -63,11 +66,17 @@ def load_agent(value: str, suffix: str):
     with agent_context(path.parent):
         spec.loader.exec_module(module)
     base = module.agent
+    call_seconds: list[float] = []
 
     def wrapped(obs):
         with agent_context(path.parent):
-            return base(obs)
+            started = time.perf_counter()
+            try:
+                return base(obs)
+            finally:
+                call_seconds.append(time.perf_counter() - started)
 
+    wrapped.call_seconds = call_seconds
     return wrapped
 
 
@@ -81,8 +90,8 @@ def wilson_interval(wins: int, games: int, z: float = 1.96) -> tuple[float, floa
     return max(0.0, center - margin), min(1.0, center + margin)
 
 
-def run_game(candidate: str, opponent: str, seat: int) -> dict:
-    record = {"opponent": opponent, "candidate_seat": seat}
+def run_game(candidate: str, opponent: str, seat: int, opponent_label: str | None = None) -> dict:
+    record = {"opponent": opponent_label or opponent, "candidate_seat": seat}
     try:
         candidate_agent = load_agent(candidate, f"candidate_{id(record)}")
         opponent_agent = load_agent(opponent, f"opponent_{id(record)}")
@@ -100,9 +109,31 @@ def run_game(candidate: str, opponent: str, seat: int) -> dict:
         record["outcome"] = (
             "error" if error else "win" if mine > theirs else "loss" if mine < theirs else "draw"
         )
+        call_seconds = getattr(candidate_agent, "call_seconds", None)
+        if call_seconds:
+            record["candidate_moves"] = len(call_seconds)
+            record["candidate_move_ms_max"] = round(max(call_seconds) * 1000, 2)
+            record["candidate_move_ms_mean"] = round(
+                sum(call_seconds) / len(call_seconds) * 1000, 2
+            )
     except Exception as exc:  # noqa: BLE001 - a crashed match is evaluation data
         record.update(error=True, outcome="error", exception=f"{type(exc).__name__}: {exc}")
     return record
+
+
+def run_games(
+    candidate: str, opponents: list[tuple[str, str]], games_per_seat: int, workers: int
+) -> list[dict]:
+    specs = [
+        (candidate, resolved, seat, label)
+        for resolved, label in opponents
+        for seat in (0, 1)
+        for _ in range(games_per_seat)
+    ]
+    if workers <= 1 or len(specs) <= 1:
+        return [run_game(*spec) for spec in specs]
+    with ProcessPoolExecutor(max_workers=min(workers, len(specs))) as pool:
+        return list(pool.map(run_game, *zip(*specs, strict=True)))
 
 
 def summarize(records: list[dict]) -> dict:
@@ -111,6 +142,8 @@ def summarize(records: list[dict]) -> dict:
     losses = sum(record["outcome"] == "loss" for record in valid)
     draws = sum(record["outcome"] == "draw" for record in valid)
     low, high = wilson_interval(wins, len(valid))
+    move_maxima = [r["candidate_move_ms_max"] for r in valid if "candidate_move_ms_max" in r]
+    move_means = [r["candidate_move_ms_mean"] for r in valid if "candidate_move_ms_mean" in r]
     return {
         "games": len(records),
         "wins": wins,
@@ -123,6 +156,10 @@ def summarize(records: list[dict]) -> dict:
         "mean_turns": round(sum(record["turns"] for record in valid) / len(valid), 2)
         if valid
         else None,
+        "candidate_move_ms_max": max(move_maxima) if move_maxima else None,
+        "candidate_move_ms_mean": round(sum(move_means) / len(move_means), 2)
+        if move_means
+        else None,
         "by_seat": {
             str(seat): {
                 outcome: sum(
@@ -132,6 +169,26 @@ def summarize(records: list[dict]) -> dict:
             }
             for seat in (0, 1)
         },
+        "by_opponent": {
+            opponent: summarize_opponent([r for r in records if r["opponent"] == opponent])
+            for opponent in dict.fromkeys(r["opponent"] for r in records)
+        },
+    }
+
+
+def summarize_opponent(records: list[dict]) -> dict:
+    valid = [record for record in records if not record["error"]]
+    wins = sum(record["outcome"] == "win" for record in valid)
+    low, high = wilson_interval(wins, len(valid))
+    return {
+        "games": len(records),
+        "wins": wins,
+        "losses": sum(record["outcome"] == "loss" for record in valid),
+        "draws": sum(record["outcome"] == "draw" for record in valid),
+        "errors": len(records) - len(valid),
+        "win_rate": round(wins / len(valid), 4) if valid else 0.0,
+        "ci95_low": round(low, 4),
+        "ci95_high": round(high, 4),
     }
 
 
@@ -168,25 +225,25 @@ def main() -> int:
     parser.add_argument("--status", default="measured")
     parser.add_argument("--description", default="")
     parser.add_argument("--append-results", action="store_true")
+    parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     args = parser.parse_args()
 
     games_per_seat = args.games_per_seat or BUNDLES[args.bundle]
     if games_per_seat < 1:
         parser.error("--games-per-seat must be positive")
+    if args.workers < 1:
+        parser.error("--workers must be positive")
     try:
         candidate = resolve_agent(args.candidate)
         opponents = [
-            resolve_agent(value.strip()) for value in args.opponents.split(",") if value.strip()
+            (resolve_agent(value.strip()), value.strip())
+            for value in args.opponents.split(",")
+            if value.strip()
         ]
     except ValueError as exc:
         parser.exit(2, f"ERROR: {exc}\n")
 
-    records = [
-        run_game(candidate, opponent, seat)
-        for opponent in opponents
-        for seat in (0, 1)
-        for _ in range(games_per_seat)
-    ]
+    records = run_games(candidate, opponents, games_per_seat, args.workers)
     total = summarize(records)
     payload = {
         "created_at_utc": datetime.now(UTC).isoformat(),

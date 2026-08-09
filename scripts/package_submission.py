@@ -31,7 +31,13 @@ def read_deck(path: Path) -> list[int]:
 
 
 def needs_cg(main_path: Path) -> bool:
-    return bool(re.search(r"(?m)^\s*(?:from\s+cg\b|import\s+cg\b)", main_path.read_text()))
+    # 동봉 모듈(fork_policy.py 등)이 cg를 임포트하는 경우도 잡도록 소스 전체를 본다.
+    pattern = r"(?m)^\s*(?:from\s+cg\b|import\s+cg\b)"
+    return any(
+        re.search(pattern, path.read_text())
+        for path in main_path.parent.glob("*.py")
+        if "__pycache__" not in path.parts
+    )
 
 
 def installed_cg() -> Path:
@@ -115,6 +121,11 @@ def build(source: Path, output: Path | None = None) -> Path:
         stage = Path(temporary)
         shutil.copy2(main_path, stage / "main.py")
         shutil.copy2(deck_path, stage / "deck.csv")
+        for extra in source.glob("*.json"):  # 후보 옆 보조 데이터(예: 증류 policy_table.json)
+            shutil.copy2(extra, stage / extra.name)
+        for extra in source.glob("*.py"):  # 동봉 모듈(예: fork_policy.py) — main.py 제외
+            if extra.name != "main.py":
+                shutil.copy2(extra, stage / extra.name)
         if needs_cg(main_path):
             copy_sdk(installed_cg(), stage / "cg")
         validate_self_play(stage / "main.py")

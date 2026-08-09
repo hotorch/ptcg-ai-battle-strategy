@@ -15,6 +15,11 @@ uv run python scripts/evaluate.py --candidate candidates/<h###_slug> --bundle qu
 uv run python scripts/evaluate.py --candidate candidates/<h###_slug> --bundle full \
   --opponents random,first,. --experiment-id YYYYMMDD-H###-nn \
   --hypothesis-id H-### --append-results
+uv run python scripts/gauntlet.py --games-per-seat 5   # 전체 후보 라운드로빈 순위
+
+uv run python scripts/mine_episodes.py deck-stats --zip data/raw/episodes/<daily>.zip  # 덱 시그니처·승률 집계
+uv run python scripts/mine_episodes.py extract --zip <daily>.zip --deck <deck.json> --out-dir <dir>
+uv run python scripts/distill_replays.py --episodes <dir> --candidate candidates/<h###_slug>  # 선택률 표 증류 + held-out 일치율
 
 uv run python scripts/kaggle_ops.py auth-check
 uv run python scripts/kaggle_ops.py status

@@ -1,0 +1,89 @@
+checked_at_utc	submission_id	status	public_score	description
+20260804T175223Z	55246854	PENDING		20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175223Z	55246850	PENDING		20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175303Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175303Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175316Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175316Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175402Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175402Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175448Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175448Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175533Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175533Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175619Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175619Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175705Z	55246854	COMPLETE	600.0	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175705Z	55246850	COMPLETE	600.0	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175751Z	55246854	COMPLETE	502.4	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175751Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175837Z	55246854	COMPLETE	502.4	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175837Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175903Z	55246989	PENDING		20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T175903Z	55246854	COMPLETE	502.4	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175903Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T175949Z	55246989	COMPLETE	600.0	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T175949Z	55246854	COMPLETE	502.4	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T175949Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180035Z	55246989	COMPLETE	600.0	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180035Z	55246854	COMPLETE	502.4	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180035Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180120Z	55246989	COMPLETE	490.1	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180120Z	55246854	COMPLETE	502.4	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180120Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180224Z	55247050	PENDING		20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180224Z	55246989	COMPLETE	490.1	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180224Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180224Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180310Z	55247050	COMPLETE	600.0	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180310Z	55246989	COMPLETE	490.1	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180310Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180310Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180355Z	55247050	COMPLETE	600.0	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180355Z	55246989	COMPLETE	490.1	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180355Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180355Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180441Z	55247050	COMPLETE	600.0	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180441Z	55246989	COMPLETE	490.1	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180441Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180441Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180527Z	55247050	COMPLETE	511.4	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180527Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180527Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180527Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180623Z	55247107	PENDING		20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260804T180623Z	55247050	COMPLETE	511.4	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180623Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180623Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180623Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180708Z	55247107	COMPLETE	600.0	20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260804T180708Z	55247050	COMPLETE	511.4	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180708Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180708Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180708Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180754Z	55247107	COMPLETE	600.0	20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260804T180754Z	55247050	COMPLETE	511.4	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180754Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180754Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180754Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180840Z	55247107	COMPLETE	600.0	20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260804T180840Z	55247050	COMPLETE	511.4	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180840Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180840Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180840Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T180926Z	55247107	COMPLETE	666.6	20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260804T180926Z	55247050	COMPLETE	607.1	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T180926Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T180926Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T180926Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260804T181025Z	55247107	COMPLETE	666.6	20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260804T181025Z	55247050	COMPLETE	607.1	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260804T181025Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260804T181025Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260804T181025Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first
+20260805T055221Z	55256596	COMPLETE	513.8	20260805-H006R-04: Majkel Lucario replay-distilled policy, local 73% vs H001+H005, gauntlet #1 83.8%
+20260805T055221Z	55247107	COMPLETE	524.6	20260805-H005-01: Crustle Great Tusk library-out, local 50% vs random-first
+20260805T055221Z	55247050	COMPLETE	369.8	20260805-H001-01: Mega Lucario generic scorer, local 35% vs random-first
+20260805T055221Z	55246989	COMPLETE	388.8	20260805-H002-01: non-ex-heavy anti-Crustle Lucario, local 35% vs random-first
+20260805T055221Z	55246854	COMPLETE	408.7	20260805-H003-01: Dragapult generic scorer, local 20% vs random-first
+20260805T055221Z	55246850	COMPLETE	477.1	20260805-H004-01: Alakazam generic scorer, local 25% vs random-first

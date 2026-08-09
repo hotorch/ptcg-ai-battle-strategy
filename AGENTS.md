@@ -29,6 +29,8 @@ Kaggle PTCG AI Battle Simulation에서 높은 래더 성능을 목표로 하되,
 - 대회 사실과 엔진은 바뀔 수 있다. 날짜가 붙은 정보는 공식 페이지와 `kaggle_ops.py status`로 재확인한다.
 - 엔진은 법적 행동 목록을 제공한다. 반환값은 중복 없는 option index 목록이며 `minCount <= len(action) <= maxCount`를 지켜야 한다.
 - 로컬 CABT는 비결정적이다. 한 경기나 매칭되지 않은 초기 상태를 인과적 A/B 증거로 취급하지 않는다.
+- **평가 실행 중인 후보의 코드를 편집하지 않는다.** evaluate.py는 게임마다 모듈을 다시 import하므로 실행 중 편집은 측정을 혼합 버전으로 오염시킨다 (2026-08-08 H-019 게이트 2건 오염 사고).
+- 희귀 이벤트 카운터는 /tmp 공유 파일이 아니라 인프로세스로 검증한다. 평가기는 게임별 프로세스를 분리해 진단 파일을 덮어쓴다 (2026-08-08 리썰 카운터 오판 사고).
 
 ## 현재 환경 사실 (2026-08-05)
 
@@ -38,4 +40,7 @@ Kaggle PTCG AI Battle Simulation에서 높은 래더 성능을 목표로 하되,
 - 평가: 승/패/무승부 기반 skill rating, 신규 제출 μ=600, 하루 5회, 최신 2개 활성.
 - 공개 top episode 데이터는 상위 참가자 평균 rating 쪽으로 편향된다.
 - replay 시각화 action은 한 step 뒤에 기록되는 off-by-one 보고가 있으므로 학습 데이터화 전에 검증한다.
+- 내장 `random`/`first` 상대는 우리 덱이 아니라 `kaggle_environments/envs/cabt/cabt.py`에 고정된 자체 60장 덱(basic 위주 + 에너지 33장)을 쓴다. 내장 상대 승률은 정책 차이만이 아니라 덱 상성까지 섞인 수치다. 내장 `random`의 정책 자체는 루트 random 기준선과 동일하다.
+- 로컬 cabt spec은 `actTimeout=0`, `runTimeout=2000`초다. 착수당 지연은 `evaluate.py`의 `candidate_move_ms_*`로 감시한다.
+- `evaluate.py`/`gauntlet.py`는 프로세스 병렬(`--workers`, 기본 8)로 실행된다. CABT 엔진은 프로세스당 전역 싱글턴이므로 한 프로세스에서 경기를 동시 실행하면 안 된다.
 
