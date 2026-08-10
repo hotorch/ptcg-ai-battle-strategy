@@ -44,3 +44,9 @@ Kaggle PTCG AI Battle Simulation에서 높은 래더 성능을 목표로 하되,
 - 로컬 cabt spec은 `actTimeout=0`, `runTimeout=2000`초다. 착수당 지연은 `evaluate.py`의 `candidate_move_ms_*`로 감시한다.
 - `evaluate.py`/`gauntlet.py`는 프로세스 병렬(`--workers`, 기본 8)로 실행된다. CABT 엔진은 프로세스당 전역 싱글턴이므로 한 프로세스에서 경기를 동시 실행하면 안 된다.
 
+
+## 시각 대기·모니터 규칙 (2026-08-10)
+
+- 절대 시각 대기는 epoch 산술(`TARGET=$(($(date +%s)+N))`)로만 한다. macOS `date -j -f`는 `-u`와 무관하게 로컬시로 파싱한다.
+- 백그라운드 모니터는 harness가 추적하는 명령(run_in_background)으로 루프를 직접 돌린다. `nohup ... &`로 분리하면 바깥 셸 종료가 즉시 "완료 알림"으로 오인되고, 분리된 프로세스는 영영 알림을 주지 못한다.
+- `pgrep -f <패턴>` 대기는 자기 명령줄과 매칭된다 — 패턴에 `[f]irst-char` 이스케이프를 쓸 것.
