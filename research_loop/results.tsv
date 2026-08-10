@@ -48,3 +48,13 @@ experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	w
 20260809-H023-01	H-023	candidates/h023_tuned	candidates/h022_alak_fork	40	15	25	0	0	0.375	0.2422	0.5297	measured	CEM-tuned weights (gen5 best .833 pool) vs vanilla fork head-to-head (gate >=55%)
 20260809-H023-02	H-023	candidates/h023_tuned	candidates/h022_alak_fork	40	17	23	0	0	0.425	0.2851	0.5781	measured	tuner v2 best (fresh-sample elite re-eval, .625 re-eval) vs vanilla gate >=55%
 20260809-H024-01	H-024	candidates/h024_lethal_graft	candidates/h022_alak_fork	40	23	17	0	0	0.575	0.4219	0.7149	measured	lethal-commit graft on fork policy vs vanilla fork (gate >=55%); probes trigger at prize<=3, budget 2.6s
+20260810-H024-02	H-024	candidates/h024_lethal_graft	candidates/h022_alak_fork	40	22	18	0	0	0.55	0.3983	0.6929	measured	
+20260810-H024-03	H-024	candidates/h024_lethal_graft	candidates/opp_meta0d	40	37	3	0	0	0.925	0.8014	0.9742	measured	
+20260810-H022-02	H-022	candidates/h022_alak_fork	candidates/opp_meta0d	40	36	4	0	0	0.9	0.7695	0.9604	measured	
+20260810-H024b-01	H-024	candidates/h024b_light	candidates/h022_alak_fork	40	17	23	0	0	0.425	0.2851	0.5781	measured	CONTROL: falsy-0 context bug (lethal never fired) == vanilla-mirror calibration; fixed build re-gated as H024b-02
+20260810-H024b-02	H-024	candidates/h024b_light	candidates/h022_alak_fork	40	25	15	0	0	0.625	0.4703	0.7578	measured	light wrapper (raw-dict lethal-window gate, falsy-0 fix) vs vanilla mirror; beats H-024's 57.5/55.0
+20260810-H024b-03	H-024	candidates/h024b_light	candidates/opp_meta0d	40	34	6	0	0	0.85	0.7093	0.9294	measured	light wrapper vs meta0d (vanilla 90.0, H-024 92.5 reference)
+20260810-H025-01	H-025	candidates/h025_upgraded_deck	candidates/h022_alak_fork	40	10	30	0	0	0.25	0.1419	0.4019	measured	REJECTED: AlphaStarmie-cluster upgraded deck on unchanged fork policy vs vanilla (gate >=55%); deck-policy co-evolution required
+20260810-H025-02	H-025	candidates/h025_upgraded_deck	candidates/opp_meta0d	40	27	13	0	0	0.675	0.5202	0.7992	measured	upgraded deck vs meta0d (vanilla 90.0 reference) — default weights misfit new deck broadly
+20260810-H027-01	H-027	candidates/h027_cluster_distill	candidates/h022_alak_fork	40	10	30	0	0	0.25	0.1419	0.4019	measured	REJECTED: cluster-distilled table on h019 stack + upgraded deck vs vanilla fork (gate >=55%); shallow imitation cannot bridge ~170pt local gap
+20260810-H027-02	H-027	candidates/h027_cluster_distill	candidates/opp_meta0d	40	31	9	0	0	0.775	0.625	0.8768	measured	
