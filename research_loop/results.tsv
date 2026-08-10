@@ -58,3 +58,6 @@ experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	w
 20260810-H025-02	H-025	candidates/h025_upgraded_deck	candidates/opp_meta0d	40	27	13	0	0	0.675	0.5202	0.7992	measured	upgraded deck vs meta0d (vanilla 90.0 reference) — default weights misfit new deck broadly
 20260810-H027-01	H-027	candidates/h027_cluster_distill	candidates/h022_alak_fork	40	10	30	0	0	0.25	0.1419	0.4019	measured	REJECTED: cluster-distilled table on h019 stack + upgraded deck vs vanilla fork (gate >=55%); shallow imitation cannot bridge ~170pt local gap
 20260810-H027-02	H-027	candidates/h027_cluster_distill	candidates/opp_meta0d	40	31	9	0	0	0.775	0.625	0.8768	measured	
+20260810-H028-01	H-028	candidates/h028_tuned_newdeck	candidates/h022_alak_fork	40	15	25	0	0	0.375	0.2422	0.5297	measured	REJECTED: CEM-tuned weights on new deck vs vanilla (gate >=55%); improved from untuned 25% but tuner pool score 0.708 did not transfer
+20260810-H028-02	H-028	candidates/h028_tuned_newdeck	candidates/opp_meta0d	40	25	15	0	0	0.625	0.4703	0.7578	measured	tuned new deck vs meta0d (vanilla 90.0 ref)
+20260810-H028-03	H-028	candidates/h028_tuned_newdeck	candidates/h024b_light	40	9	31	0	0	0.225	0.1232	0.375	measured	tuned new deck vs h024b_light head-to-head — champion dominates; new-deck lever closed (3 strikes: H-025/H-027/H-028)
