@@ -61,6 +61,9 @@ experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	w
 20260810-H028-01	H-028	candidates/h028_tuned_newdeck	candidates/h022_alak_fork	40	15	25	0	0	0.375	0.2422	0.5297	measured	REJECTED: CEM-tuned weights on new deck vs vanilla (gate >=55%); improved from untuned 25% but tuner pool score 0.708 did not transfer
 20260810-H028-02	H-028	candidates/h028_tuned_newdeck	candidates/opp_meta0d	40	25	15	0	0	0.625	0.4703	0.7578	measured	tuned new deck vs meta0d (vanilla 90.0 ref)
 20260810-H028-03	H-028	candidates/h028_tuned_newdeck	candidates/h024b_light	40	9	31	0	0	0.225	0.1232	0.375	measured	tuned new deck vs h024b_light head-to-head — champion dominates; new-deck lever closed (3 strikes: H-025/H-027/H-028)
-20260811-H029a-01	H-029	candidates/h029a_relaxed	candidates/h024b_light	60	34	26	0	0	0.5667	0.441	0.6843	measured	
-20260811-H024b-04	H-024	candidates/h024b_light	candidates/opp_grimmsnarl,candidates/opp_meta2	80	79	1	0	0	0.9875	0.9325	0.9978	measured	
-20260811-H029a-02	H-029	candidates/h029a_relaxed	candidates/opp_meta0d	40	33	7	0	0	0.825	0.6805	0.9125	measured	
+20260811-H029a-01	H-029	candidates/h029a_relaxed	candidates/h024b_light	60	34	26	0	0	0.5667	0.441	0.6843	measured	relaxed lethal window (prize<=4, 3.0s) succession gate vs h024b over 60g — PASSED, new champion
+20260811-H024b-04	H-024	candidates/h024b_light	candidates/opp_grimmsnarl,candidates/opp_meta2	80	79	1	0	0	0.9875	0.9325	0.9978	measured	archetype sweep vs grimmsnarl/meta2 bots — local bots too weak to reveal boundary weaknesses (cf. h017d/h020 same 79-1)
+20260811-H029a-02	H-029	candidates/h029a_relaxed	candidates/opp_meta0d	40	33	7	0	0	0.825	0.6805	0.9125	measured	h029a vs meta0d guard (h024b 85.0 ref)
+20260811-H029b-01	H-029	candidates/h029b_defense	candidates/h029a_relaxed	60	30	30	0	0	0.5	0.3773	0.6227	measured	REJECTED: defense window (opp prize<=2 -> search value vote) adds nothing vs h029a — fork native 2-ply tactics sufficient in danger states
+20260811-H029b-02	H-029	candidates/h029b_defense	candidates/opp_meta0d	40	31	9	0	0	0.775	0.625	0.8768	measured	defense build vs meta0d guard (h029a 82.5 ref)
+20260811-H029a-03	H-029	candidates/h029a_relaxed	candidates/h027_cluster_distill	40	24	16	0	0	0.6	0.446	0.7365	measured	boundary matchup vs h027 Dudunsparce-family proxy (23% of 840-900 band): 60.0% — pre-registered threshold met, H-029c counter-tuning not needed
