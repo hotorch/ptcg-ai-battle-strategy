@@ -70,3 +70,6 @@ experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	w
 20260812-H030-01	H-030	candidates/h030_deckout_guard	candidates/h024b_light	60	29	31	0	0	0.4833	0.3617	0.6069	measured	deckout guard ACTIVATE draw ban margin<3 vs h024b mirror 60g
 20260812-H030-02	H-030	candidates/h030_deckout_guard	candidates/opp_meta0d	40	32	8	0	0	0.8	0.6524	0.895	measured	deckout guard vs meta0d no-regression (h024b ref 85.0)
 20260812-H033-01	H-033	candidates/h033_go_first	candidates/h030_deckout_guard	60	30	30	0	0	0.5	0.3773	0.6227	measured	go-first flip vs h030 control 60g (ladder: forced-first 67.7% n31)
+20260812-H034-01	H-034	candidates/h034_mirror_list	candidates/h030_deckout_guard	60	36	24	0	0	0.6	0.4737	0.7143	measured	V1 mirror-winner list (26 teams, 21-5 vs us) on h030 policy vs h030 old list 60g
+20260812-H034-02	H-034	candidates/h034_mirror_list	candidates/opp_meta0d	40	31	9	0	0	0.775	0.625	0.8768	measured	V1 list vs meta0d no-regression (h030 ref 80.0, h024b ref 85.0)
+20260812-H034-03	H-034	candidates/h034_mirror_list	candidates/opp_grimmsnarl	40	39	1	0	0	0.975	0.8712	0.9956	measured	V1 list vs grimmsnarl proxy no-regression (2nd matchup, ladder 49%)
