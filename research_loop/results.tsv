@@ -67,3 +67,6 @@ experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	w
 20260811-H029b-01	H-029	candidates/h029b_defense	candidates/h029a_relaxed	60	30	30	0	0	0.5	0.3773	0.6227	measured	REJECTED: defense window (opp prize<=2 -> search value vote) adds nothing vs h029a — fork native 2-ply tactics sufficient in danger states
 20260811-H029b-02	H-029	candidates/h029b_defense	candidates/opp_meta0d	40	31	9	0	0	0.775	0.625	0.8768	measured	defense build vs meta0d guard (h029a 82.5 ref)
 20260811-H029a-03	H-029	candidates/h029a_relaxed	candidates/h027_cluster_distill	40	24	16	0	0	0.6	0.446	0.7365	measured	boundary matchup vs h027 Dudunsparce-family proxy (23% of 840-900 band): 60.0% — pre-registered threshold met, H-029c counter-tuning not needed
+20260812-H030-01	H-030	candidates/h030_deckout_guard	candidates/h024b_light	60	29	31	0	0	0.4833	0.3617	0.6069	measured	deckout guard ACTIVATE draw ban margin<3 vs h024b mirror 60g
+20260812-H030-02	H-030	candidates/h030_deckout_guard	candidates/opp_meta0d	40	32	8	0	0	0.8	0.6524	0.895	measured	deckout guard vs meta0d no-regression (h024b ref 85.0)
+20260812-H033-01	H-033	candidates/h033_go_first	candidates/h030_deckout_guard	60	30	30	0	0	0.5	0.3773	0.6227	measured	go-first flip vs h030 control 60g (ladder: forced-first 67.7% n31)
