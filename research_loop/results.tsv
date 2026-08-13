@@ -75,3 +75,5 @@ experiment_id	hypothesis_id	candidate	opponents	games	wins	losses	draws	errors	w
 20260812-H034-03	H-034	candidates/h034_mirror_list	candidates/opp_grimmsnarl	40	39	1	0	0	0.975	0.8712	0.9956	measured	V1 list vs grimmsnarl proxy no-regression (2nd matchup, ladder 49%)
 20260813-H035-01	H-035	candidates/h035_stall_guard	candidates/h034_mirror_list	60	33	27	0	0	0.55	0.4249	0.6691	measured	
 20260813-H035-02	H-035	candidates/h035_stall_guard	candidates/opp_meta0d	40	34	6	0	0	0.85	0.7093	0.9294	measured	
+20260814-H036-02	H-036	candidates/h036_tempo_boss	candidates/opp_meta0d,candidates/opp_grimmsnarl	80	74	6	0	0	0.925	0.8459	0.9652	measured	tempo boss gate: meta0d + grimmsnarl proxy
+20260814-H036-01	H-036	candidates/h036_tempo_boss	candidates/h024b_light	60	30	30	0	0	0.5	0.3773	0.6227	measured	tempo boss gate: mirror vs h024b
