@@ -1,54 +1,61 @@
-# Strategy Writeup 골격 v1 (2026-08-08 — 벤치마크 3종 반영)
+# Strategy Writeup 골격 v2 (2026-08-16 — 최종 서사 반영 개정)
 
-목표: 2,000단어 이하. 원칙: **루브릭 체크리스트 채점에 맞춰 줄 단위로 채점하기 쉽게** 쓴다.
-근거: `../08-writeup-benchmarks.md` (시뮬레이션 우승작 6편 + 심사형 우승작 6편 + 현 대회 지형).
+목표: 2,000단어 이하, 그림 5. 원칙: **루브릭 체크리스트 채점에 맞춰 줄 단위로 채점하기 쉽게** 쓴다.
+근거: `../08-writeup-benchmarks.md` + 최종 2주의 실제 서사. v1(8/8)은 git 이력 참조 — v1의 테제("replay-mined priors + turn search + learned value")는 1주차 스택 기준이라 **최종 에이전트(h036, fork 계열)와 불일치**하여 전면 개정.
 
-## 작성 원칙 (벤치마크 도출)
+## v2 테제 (한 문장)
 
-- 섹션 제목에 루브릭 언어 미러링, **제목이 곧 발견**("Data refresh alone bought +88 rating" 식).
-- 훅+TL;DR 100단어 이내. 배경 설명 금지. 시간순 일지 금지 — 주장 단위 조직.
-- 모든 주장 옆에 수치(표본수·CI 병기). 그림은 캡션에 takeaway 내장.
-- 서두에 재현성 선언 1문장(코드·원장·그림 재현 경로).
-- 시그니처 혁신에 이름: **"distilled-opponent gate"**, **"reply-horizon search"**.
-- 강건성은 한 문장 수치로(ttvand 패턴): 세대별 게이트 통과·양좌석·아키타입 성적 압축.
-- 정직 섹션 필수(What didn't work) — 메커니즘 설명 포함.
+> We treated the ladder itself as the object of study: every build is a **distribution** (57 submissions, 17 builds), every change is a **gated experiment** (zero-collateral replay regression), and the meta is a **dynamical system** we measured well enough to predict its final state (Dragapult 6.3%→41.2%, called in advance).
+
+최종 에이전트 = 공개 룰베이스 베이스라인(Rozen V10, 명시적 크레딧)을 5회의 검증된 외과수술로 개선한 것. **독창성 주장의 축은 에이전트 코드가 아니라 실험 방법론** — 이것이 정직하面서 루브릭(독창성·기술적 타당성·강건성) 최적화 포지션.
 
 ## 섹션 골격 (단어 예산 2,000 / 그림 5)
 
 1. **Approach at a Glance** (~150w)
-   - 테제 1문장: replay-mined priors + determinized turn search + learned value, every change gated by falsifiable local experiments.
-   - 헤드라인 수치 표 3행(최종 레이팅, 건틀릿 양좌석 승률, held-out 일치율). 재현성 선언 1문장.
-2. **Deck Rationale: Deck Selection as a Data Problem** (~250w + 그림: 덱 승률 분포)
-   - 일일 episode 마이닝 → 덱 시그니처·승률 집계 → Majkel Lucario 63.4% 전체 1위 확인 후 채택.
-   - "덱은 옳고 파일럿이 문제" 반전(meta0 46.4% 평범). 키 카드 4~6개 역할 소표 + 에이전트 정책과의 정합.
-   - [Deck 20% 전용 — 벤치마크 대회들엔 없던 항목, 묻히면 안 됨]
-3. **How the Agent Decides** (~400w + 우선순위 캐스케이드 의사코드)
-   - 계층: 증류 프라이어 → 결정화 턴 탐색(하위 선택 포함) → 응수 테이블 상대 모델 → 학습 가치함수 리프.
-   - 발견-제목 소절: "The same data has different value at different injection points" (H-015: MAIN 블렌드 무효 → 탐색 리프 +7.5pp).
-4. **Worked Example: One Turn, Annotated** (~250w + 3패널 그림: 보드상태+행동분포+승률곡선)
-   - Toad Brigade 패턴. 리썰/체인 결정 순간 1개 주석.
-5. **Consistency Under Repeated Play** (~250w + 그림: 건틀릿 매트릭스 or 래더 궤적)
-   - 양좌석 반복·표본 규율(비결정론 엔진 → paired A/B 불가 판단 포함), 세대별 래더 수렴치 아블레이션 표.
-   - 평가 방법론 서사: 제네릭 봇 85~90% 포화 → **distilled-opponent gate**(52.5% 비포화) 발명.
-6. **Robustness and Weak Matchups** (~250w + 그림: 좌석×아키타입 소형 다중)
-   - two-regime 패턴: 좌석 × 아키타입(meta2 40-0, grimmsnarl 39-1, meta0d, 미러).
-   - 최악 매치업(meta0) 공개 + 진단(승자 대비 핸드 체인 절반 실행) + 패치 서사. H-017f 기각 = 과적합 회피 실례.
+   - 테제 1문장 + 헤드라인 수치: 57 submissions / 17 builds, 21,975-decision zero-collateral verification, meta endgame predicted-then-verified (41.2% vs limitless equilibrium 42.7%), 최종 페어 레이팅.
+   - 재현성 선언 1문장(코드·원장 results.tsv·그림 재현 경로).
+2. **Deck Selection as a Data Problem** (~220w + 그림 없음, 소표 1)
+   - 초기: 데일리 episode 마이닝 → 시그니처·승률 집계로 Alakazam 라인 채택(당시 상위 점유·검증된 리스트). 키 카드 4~6개 역할 소표 + 정책과의 정합(Abra 스나이프, boss 라인).
+   - 후기: **군중픽 역설 발견** (most-played = worst-performing: Grimmsnarl 23%/41%, Alakazam 13%/44%) + 덱-정책 결합도 때문에 교체 비용이 게이트 예산 초과 → 유지 결정의 정량 근거. "무엇을 언제 알았고 왜 그대로 갔나"를 데이터로 서술 — Deck 20%는 응원이 아니라 분석으로 딴다.
+3. **How the Agent Decides — and the Five Surgeries** (~350w + 그림 A: 우선순위 캐스케이드 + 수술 부위 마킹)
+   - fork 골격(우선순위 캐스케이드) 위 5개 수술: light-lethal graft(H-024b), deck-out guard(H-030), mirror-list(H-034), stall guard(H-035), **tempo boss(H-036)**.
+   - Worked example 통합: tempo-boss 플립 1개 주석(드로 서포터 4249 vs boss_kill_now 6000 — 킬 수학 포함). 표준: **리플레이 회귀 21,975결정 65/65 의도 플립·부수피해 0**만 출고.
+   - 발견-제목 소절 유지: "The same data has different value at different injection points" (H-015).
+4. **Every Build Is a Distribution** (~300w + 그림 B: 빌드별 인스턴스 분포 스트립 플롯) — **방법론 센터피스**
+   - 동일 빌드 반복 제출로 래더 레이팅 분포 표집: h024b n=7 (711~845), h036 n=9 (674~757). 단일 제출 = 분포에서 1추첨 — 래더 단일 표본 A/B는 통계적으로 무효.
+   - **통제 실험**: 동일 빌드 3일 후 재제출(825.4 vs 사전 n=4 평균 782) — 밴드 안정성 검증.
+   - **래더 역학 3발견**: sticky placement(4-1 스타트 → 943 스파이크 → 750 수렴, ~30경기 반감), 신규 제출 우선 스케줄링(동시간 32경기 vs 1경기), 마감 후 수렴이 배치 운을 소거 — 최종 페어 잠금 논리의 근거.
+5. **The Meta Is a Dynamical System** (~300w + 그림 C: 수렴 시계열 + 예측→실현 화살표)
+   - 상위 풀 점유율 시계열(8/04~15) × 외부 균형(limitless): TV 거리 단조 수렴(0.398→0.321), 메커니즘 = 래더 내 선택압(저승률 군중픽 도태).
+   - **예측의 실현**: "마감 풀은 더 Dragapult-heavy" (8/14 기록) → 8/15 실측 41.2%(균형점 42.7% 도달). 노출 가중 기대승률 궤적(45-48%→43%→37.5%)으로 "다가오는 벽" 정량화 → 최종 주 의사결정(마이크로 엣지, 기적 금지)의 근거.
+6. **Consistency & Robustness** (~250w + 그림 D: 좌석×아키타입 매트릭스)
+   - 엔진 비결정론 → paired A/B 불가 판정 → 양좌석 반복 + 표본 규율. 제네릭 봇 포화(85-90%) → **distilled-opponent gate** 발명(비포화 52.5%).
+   - 최악 매치업 공개: Dragapult 24.9%, Slowking 29.2% + 노출 수학(레이팅 상승 → 노출 증가 → 천장) — 강건성 항목을 "약점의 정직한 정량화"로 채점받기.
 7. **What Didn't Work** (~200w)
-   - 스케일링 무효 3건(노드 3배·K=6·예산 8s — 전부 CI 내), 관측 로지스틱의 드로우 인과 실패(`my_deck_consumed` 음수 교란), RL 미채택 근거(공개 지형 인용: 공개 RL 시도 전부 룰베이스 이하).
-8. **Conclusion + Code** (~100w)
-
-## 열린 결정
-
-- c-number식 내장 아블레이션(최종 2슬롯 = best + 제거판): 순위 손해 트레이드오프 있음. 차선 = 과거 세대 래더 수렴치가 자연 아블레이션 → 아블레이션 표로 대체 가능. 8/14 슬롯 결정 때 확정.
-- 카드명 텍스트 언급 범위: 규정 질문(733690) 미답변 — 최소화 방침 유지.
-- 덱리스트는 첨부로(단어 수 방어, 733067 미답변).
+   - 1주차 ML 스택 전부(증류 484-571, 학습 가치함수 511-601, 탐색 587-667)가 **공개 룰베이스 fork(818.8)에 완패** — 메커니즘 진단 포함(가치함수 AUC .74로는 수제 우선순위 대비 신호 부족, 증류는 파일럿 혼합의 평균으로 회귀).
+   - 스케일링 무효 3건, H-017f 과적합 기각, RL 미채택 근거(공개 지형).
+8. **Conclusion + Code** (~80w): 잠금 논리(수렴이 최종 심판), MIT 공개.
 
 ## 그림 자산 계획 (5개)
 
 | 그림 | 섹션 | 상태 |
 |---|---|---|
-| 덱 승률 분포(마이닝) | §2 | 신규 — mine_episodes deck-stats |
-| 우선순위 캐스케이드 의사코드 | §3 | 신규 — 텍스트 블록 |
-| 3패널 게임 순간 | §4 | 신규 — replay + 가치함수 곡선 |
-| 래더 궤적/아블레이션 | §5 | fig_ladder_trajectory 갱신됨 + ablation_table.md |
-| 좌석×아키타입 소형 다중 | §6 | fig_seat_split + fig_by_opponent 통합 리디자인 |
+| A. 우선순위 캐스케이드 + 5수술 부위 | §3 | 신규 — 텍스트/다이어그램 |
+| B. 빌드별 인스턴스 분포 스트립 플롯 | §4 | 신규 — rating_history.tsv에서 생성 |
+| C. 메타 수렴 시계열 + 예측 실현 | §5 | 신규 — 결과 4·5 데이터 |
+| D. 좌석×아키타입 매트릭스 | §6 | fig_seat_split + fig_by_opponent 통합 |
+| E. 래더 궤적 + 이벤트 주석(i5 스파이크 포함) | §4 보조 or §1 훅 | fig_ladder_trajectory 갱신 |
+
+## 열린 결정 (v1에서 승계·갱신)
+
+- 내장 아블레이션: 과거 세대 래더 수렴치가 자연 아블레이션 → 아블레이션 표로 대체 (확정 — 최종 슬롯은 h036 페어로 잠금됨).
+- 카드명 텍스트 언급 최소화 방침 유지(733690 미답변). 덱리스트는 첨부(733067 미답변).
+- **마감 후 2주 수렴 데이터**(8/17~30): i8/i9 최종 수렴 궤적을 §4의 마지막 증거로 추가 — "예측한 수렴을 자기 에이전트로 재검증" 마무리. 9/1 이후 최종 수치 반영해 탈고.
+- 2라운드 규정 확인(8/14 공식 답변): Writeup에 두 제출 모두 포함 가능 — i8/i9 페어 운영(분포 표집의 실전 적용)을 §4에 1문장으로.
+
+## 일정 (9/13 마감)
+
+- 8/17~30: 수렴 관전 + 주 2회 궤적 기록(자동화 검토). 그림 B/C/E 데이터 확정.
+- 8/31~9/5: 초안 1 (2,000w) + 그림 5종 생성.
+- 9/6~9/10: 벤치마크 루브릭 대조 퇴고 + 외부 시선 검토 1회.
+- 9/11~13: 최종 제출 (draft 아닌 Submit 확인 — 저장만 된 draft는 심사 제외!).
