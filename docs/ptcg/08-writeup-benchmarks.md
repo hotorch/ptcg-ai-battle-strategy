@@ -82,3 +82,32 @@ Don'ts: 시간순 실험 일지 금지(주장 단위로 조직), 심사자가 �
 1. **에이전트 개선 레버 2개 수입 가능**: (a) 리썰 모드 — 승리 라인 전방 탐색 검증은 우리 탐색 구조에 자연 결합, (b) 프라이즈 추론 — 결정화 샘플링의 은닉 정보 모델 개선. 공개 기법이므로 인용하고 개량하면 originality 손상 없음.
 2. 공개 950 베이스라인의 존재는 "리더보드 성적" 항목에서 우리 위치를 더 아프게 만든다 — 남은 기간 래더 레버는 이 두 수입 기법에 집중하는 것이 방어 논리(공개 지식 흡수+개량)도 서사도 좋다.
 3. Writeup에서 "공개 증거상 RL 저조, 룰+탐색 우세" 지형을 인용하면 우리 하이브리드(증류 프라이어+탐색+학습 가치)의 위치 설정이 선명해진다.
+
+## G. 마감 후 공개 지형 (08-18 리서치)
+
+시뮬 마감(8/16) 이틀 만에 첫 솔루션 물결 시작. 최상위권(top-10)은 아직 함구. 공식 공지(735312)가 "지금부터 솔루션 공유 환영·장려"를 명시했고, 수렴 기간 종료(~8/30)~Hackathon 마감(9/13) 사이 집중 공개 예상. 일부는 도쿄 2라운드 이후까지 비공개 유지 가능성(포럼에서 우려 제기됨).
+
+### 확보한 1차 자료 (본문 전문 로컬 저장)
+
+Kaggle CLI `topics show`는 원글 본문을 반환하지 않으므로(메타데이터+댓글만) 아래 2건은 브라우저로 수동 수집:
+
+- **Team Magist Solution** (114위, jazivxt+WOOSUNG YOON, 8/17) — [원문](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/writeups/team-magist-solution) · 로컬 전문: [research/20260818-team-magist-solution.md](research/20260818-team-magist-solution.md)
+  - Waltheri식 **패턴 DB**(양측 액티브 primary key + 데미지 5단위 양자화·벤치·에너지 secondary) + **2층 Transformer policy/value(T96)** + 히든 정보 **Monte Carlo 샘플링**(Judge 예시) + **GA 덱 탐색**.
+  - **GA 결론이 우리 build-as-distribution과 교차검증**: "특이 변형 덱은 일관되게 더 강하지 않았고, 상위 리더보드 덱 구조가 더 안정적 → 최종은 상위 공개 덱 추종, 최적화는 정책에 집중."
+  - Kaggle 새 `/writeups/` 포맷 사용 — Strategy 제출 포맷의 실물 참고.
+- **Abhyuday 내부 툴링** (66위, 8/17) — [원문](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735649) · 로컬 전문: [research/20260818-abhyuday-tooling.md](research/20260818-abhyuday-tooling.md)
+  - "mini Kaggle" 컨트롤 패널: 로컬 elo 리더보드 + 8코어 상시 아레나 라운드로빈 + 제출 30분 내 ±30 elo 추정 + 메타 감시(Dragapult 상승 2일 조기 경보 → 카운터 학습 → 70% 승률).
+  - **우리 gauntlet.py + watch_pair + archetype_shares와 동일 철학** — 방법론 장(§8)에서 "동시대 상위권의 독립 수렴"으로 인용 가치. 결론 인용구: "You can't improve unless you know why you're losing."
+  - 댓글 요점: 아레나 승률은 커리큘럼 동적 조정에 사용(리플레이 미사용); 특정 덱 결손은 그 덱의 강한 teacher를 상대 풀에 투입해 패치.
+
+### 볼만한 회고류 (기술 밀도 낮음, 후속 예고 있음)
+
+- [TommyCyd 회고](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735503) (92위, 55v) — 팀원 Zhenyu Zhang의 rule-based+IL 하이브리드 상세 writeup 예고. 댓글에 110위 등 회고 다수.
+- [공식: Upcoming Submission Deadline](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735312) — 수렴 기간 에피소드 48→96/day, 8월 3주차 anti-cheat 스윕, Hackathon 점수는 본인 시뮬 성적 기반(표절 무의미). 댓글에 "~3시간 게임 없음"(2위 Azat) 등 수렴 기간 이상 징후 보고.
+- 기타: Toshiko Miyake(735681), Scio(735563) 회고 / 엔진 이슈: Hero's Cape 버그(735766), 비종료 게임 가드(735675), "-NaN" 표시(735574).
+
+### 운영 메모
+
+- `curate_context.py` 기본 `--topics 8`은 점수순이라 신규 글이 밀림 → 마감 후 기간에는 `--topics 20` 권장 (8/18 실행분: `context/kaggle/curated/20260818T011250Z/`).
+- `/writeups/` 경로 글은 discussion 목록에 잡혀도 본문이 CLI로 안 옴 — 앞으로 나올 상위권 writeup도 같은 방식으로 수동 수집 필요.
+- 후속 워치 대상: top-10 솔루션 공개(8/30~9/13 예상), Zhenyu Zhang writeup, Abhyuday playground 공개.
