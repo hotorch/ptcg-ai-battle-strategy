@@ -36,6 +36,18 @@
 
 공식 Overview 명시: 리더보드 상위권은 유리하지만 보장 아님. **중하위권도 깊은 분석·독창성·구조화된 보고서로 높은 총점 가능.**
 
+### 공식 Evaluation 원문 (08-18 API 재수집 — 채점 기준은 질문 9개 형태, 제목 미러링용)
+
+- Model 70%: ① How clearly is the chosen approach articulated, and how well is the rationale for the model and methods explained? ② How original and technically sound is the proposed approach? ③ How consistently does the model perform under repeated matches and stable conditions? ④ How well does the strategy avoid over-reliance on specific initial states, matchups, or situational advantages? ⑤ Performance within the competition track.
+- Deck 20%: ⑥ How clearly is the deck concept articulated, and how well does it align with the intended strategy? ⑦ How effectively are the key cards selected and utilized to support the deck's overall game plan?
+- Report 10%: ⑧ How logically and clearly is the report structured and written? ⑨ How effectively are figures, charts, tables, or other visual elements used to support the explanation?
+- **LB 성적은 9개 채점 질문 중 1개(⑤)뿐** — 나머지 8개는 전부 서술·방법론·덱 논리·도표 품질.
+
+### 심사 주체 (08-18 확인)
+
+- 공식 사이트의 "judges" 페이지는 **placeholder 상태로 심사자 미공개**. Rules상 "evaluated and ranked by judges", 동점은 judges 합의로 결정, Host(The Pokémon Company/PTCGABC 팀)가 winner 결정 책임. 즉 주최측이 지정한 비공개 심사단.
+- 심사 기간 9/14~10/11, 단서: "subject to change based on the number of submissions received."
+
 ## 전략적 함의
 
 - 리더보드 6,306팀 중 8등보다 Writeup 304팀 중 8등이 훨씬 현실적. 8/16 이후 4주는 전부 보고서 품질에 투자.
