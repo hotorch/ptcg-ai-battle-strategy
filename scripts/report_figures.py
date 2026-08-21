@@ -253,6 +253,229 @@ def cmd_deck_field(args: argparse.Namespace) -> None:
     print(f"saved {out}")
 
 
+# limitless TEF-POR all-time 셰어 (8/14 수집, top-agent-observation.md 결과 4).
+# Grimmsnarl·Slowking은 상위 15위 밖 → 0 처리 (TV도 같은 규약).
+_META_BALANCE = {
+    "Dragapult": 42.7,
+    "Grimmsnarl": 0.0,
+    "Alakazam": 4.9,
+    "Meganium/TapuBulu": 2.3,
+    "Slowking": 0.0,
+    "MegaLucario": 3.0,
+}
+_META_LINES = [
+    ("Dragapult", SERIES[0]),
+    ("Grimmsnarl", SERIES[1]),
+    ("Alakazam", SERIES[2]),
+    ("Meganium/TapuBulu", SERIES[3]),
+    ("Slowking", SERIES[4]),
+    ("MegaLucario", "#9a9996"),
+]
+
+
+def cmd_meta(args: argparse.Namespace) -> None:
+    """그림 C: 상위 풀 아키타입 셰어 시계열 + limitless 균형점(예측→실현).
+
+    입력: mine_episodes deck-stats --out 덤프(scratch/decks_YYYY-MM-DD.json).
+    분모 = 덱-게임 수(2×에피소드), 집계 규약은 archetype_shares.py와 동일.
+    """
+    import datetime as dt
+
+    from archetype_shares import classify
+
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
+    dates, shares = [], {name: [] for name, _c in _META_LINES}
+    tvs = []
+    for path in sorted(Path().glob(args.dumps)):
+        rows = json.loads(Path(path).read_text())
+        total = sum(r["games"] for r in rows)
+        agg: dict = {}
+        for r in rows:
+            name = classify({cid for cid, _n in r["signature"]})
+            agg[name] = agg.get(name, 0) + r["games"]
+        date = dt.date.fromisoformat(Path(path).stem.replace("decks_", ""))
+        dates.append(date)
+        for name, series in shares.items():
+            series.append(100.0 * agg.get(name, 0) / total)
+        tvs.append(
+            0.5 * sum(abs(100.0 * agg.get(n, 0) / total - q) for n, q in _META_BALANCE.items()) / 100.0
+        )
+
+    fig, (ax, ax_tv) = plt.subplots(
+        2, 1, figsize=(7, 5.2), sharex=True, height_ratios=[3, 1]
+    )
+    # 균형점 라벨 y 위치: 겹침 방지를 위해 아래에서부터 최소 간격을 강제한다.
+    label_y, floor = {}, -3.5
+    for name, eq in sorted(_META_BALANCE.items(), key=lambda kv: kv[1]):
+        label_y[name] = max(eq, floor + 3.2)
+        floor = label_y[name]
+    for name, color in _META_LINES:
+        ys = shares[name]
+        eq = _META_BALANCE[name]
+        ax.plot(dates, ys, color=color, linewidth=2, marker="o", markersize=3, label=name)
+        # 예측→실현: 마지막 관측치에서 limitless 균형점으로 향하는 화살표.
+        if abs(eq - ys[-1]) >= 3.0:
+            ax.annotate(
+                "",
+                xy=(dates[-1] + dt.timedelta(days=1.4), eq),
+                xytext=(dates[-1] + dt.timedelta(days=0.3), ys[-1]),
+                arrowprops={"arrowstyle": "->", "color": color, "linewidth": 1.1, "linestyle": ":"},
+            )
+        ax.plot(
+            [dates[-1] + dt.timedelta(days=1.4), dates[-1] + dt.timedelta(days=2.2)],
+            [eq, eq], color=color, linewidth=1.4, linestyle=":",
+        )
+        ax.annotate(
+            f"eq {eq:.1f}%" if eq else "eq ~0%",
+            (dates[-1] + dt.timedelta(days=2.4), label_y[name]),
+            color=color,
+            fontsize=7.5,
+            va="center",
+        )
+        if name in ("Dragapult", "Grimmsnarl"):
+            ax.annotate(
+                f"{ys[-1]:.1f}",
+                (dates[-1], ys[-1]),
+                textcoords="offset points",
+                xytext=(-4, 7),
+                color=color,
+                fontsize=8,
+                fontweight="bold",
+            )
+    ax.set_xlim(dates[0] - dt.timedelta(days=0.5), dates[-1] + dt.timedelta(days=5.2))
+    ax.set_ylim(-4, 47)
+    ax.set_ylabel("share of top-pool deck-games (%)")
+    ax.set_title("Top-pool meta converges toward the external (limitless) equilibrium", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, ncol=2, loc="upper center")
+    ax.set_xticks(dates)
+    ax.set_xticklabels([d.strftime("%m/%d") for d in dates], fontsize=8)
+    ax_tv.tick_params(axis="x", labelrotation=45)
+
+    ax_tv.plot(dates, tvs, color=TEXT, linewidth=2, marker="o", markersize=3)
+    for i in (0, len(tvs) - 1):
+        ax_tv.annotate(
+            f"{tvs[i]:.3f}",
+            (dates[i], tvs[i]),
+            textcoords="offset points",
+            xytext=(0, 7),
+            color=TEXT_2,
+            fontsize=7.5,
+            ha="center",
+        )
+    ax_tv.set_ylabel("TV distance\nto equilibrium")
+    ax_tv.set_xlabel("daily top-episodes dataset date (2026)")
+    fig.tight_layout()
+    out = FIG_DIR / "fig_meta_convergence.png"
+    fig.savefig(out, dpi=200)
+    print(f"saved {out}")
+    for d, tv in zip(dates, tvs):
+        print(f"  {d} TV={tv:.3f} " + " ".join(f"{n}={shares[n][dates.index(d)]:.1f}%" for n, _ in _META_LINES))
+
+
+# 그림 A 색: 최종 빌드 포함 수술 vs 로컬 게이트만 통과(래더 미번역).
+_SHIPPED = "#1baf7a"
+_REJECTED = "#eb6834"
+
+
+def cmd_cascade(args: argparse.Namespace) -> None:
+    """그림 A: 결정 파이프라인(포크 골격 + 우선순위 캐스케이드)과 5개 수술 부위.
+
+    구조 출처: candidates/h036_tempo_boss/{main.py,fork_policy.py} (h024b와의
+    diff는 boss_kill_now 1건), 가드 수술은 candidates/h030·h034·h035 diff.
+    """
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(9.2, 6.4))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+
+    def box(x, y, w, h, text, fc=SURFACE, ec=GRID, fs=8.5, color=TEXT, lw=1.2):
+        ax.add_patch(
+            plt.Rectangle((x, y), w, h, facecolor=fc, edgecolor=ec, linewidth=lw, zorder=2)
+        )
+        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=fs, color=color, zorder=3)
+
+    def badge(x, y, label, color):
+        ax.add_patch(plt.Circle((x, y), 2.6, facecolor=color, edgecolor="none", zorder=4))
+        ax.text(x, y, label, ha="center", va="center", fontsize=7.5, color="white", fontweight="bold", zorder=5)
+
+    def arrow(x0, y0, x1, y1):
+        ax.annotate(
+            "", xy=(x1, y1), xytext=(x0, y0),
+            arrowprops={"arrowstyle": "->", "color": TEXT_2, "linewidth": 1.2}, zorder=1,
+        )
+
+    ax.text(
+        27, 98, "one decision pipeline, five surgeries",
+        ha="center", fontsize=11, fontweight="bold",
+    )
+
+    # -- 왼쪽: 결정 파이프라인 --
+    box(4, 88, 46, 6, "main.py entrypoint (raw obs_dict)", fs=9)
+    arrow(27, 88, 27, 84.5)
+    box(4, 77, 46, 7, "lethal window?\nmy prizes ≤ 3 in MAIN, or committed kill-line replay", fs=8)
+    badge(50, 84, "S1", _SHIPPED)
+    box(58, 75.5, 38, 8.5, "h019 lethal machine\ncrystallized-turn search; kill committed\nonly after 2-of-2 fresh re-verification", fs=8)
+    arrow(50, 80.5, 58, 80)
+    ax.text(54, 82, "yes", fontsize=7.5, color=TEXT_2)
+    arrow(27, 77, 27, 73.5)
+    ax.text(29, 74.8, "no", fontsize=7.5, color=TEXT_2)
+
+    box(4, 66, 46, 7, "Rozen V10 fork — score every legal option,\nplay the max (memetic-tuned weights)", fs=8.5)
+    arrow(27, 66, 27, 63.5)
+
+    tiers = [
+        ("draw abilities (Dudunsparce / Fezandipiti)", "30k–38k", [("S2", _REJECTED), ("S4", _REJECTED)]),
+        ("bench Pokémon", "~20k", []),
+        ("stadium counters", "18.5k–19.5k", []),
+        ("setup items (Poffin / Poke Pad / Rare Candy)", "12k–18k", []),
+        ("recovery (Night Stretcher / Sacred Ash)", "11k–13.5k", []),
+        ("evolve · tools · energy attach", "4k–9.8k", []),
+        ("supporters: draw 3k–4.2k · Boss's Orders 2.3k", "", [("S5", _SHIPPED)]),
+        ("retreat 2k–2.5k · attack ≤ 1k", "", []),
+    ]
+    y = 58.5
+    for label, rng, badges in tiers:
+        text = f"{label}   {rng}" if rng else label
+        box(7, y, 40, 4.6, text, fs=7.5, ec="#d4d3cf")
+        for i, (blabel, bcolor) in enumerate(badges):
+            badge(50 + i * 5.5, y + 2.3, blabel, bcolor)
+        y -= 5.4
+    ax.annotate(
+        "", xy=(5.2, 21), xytext=(5.2, 62),
+        arrowprops={"arrowstyle": "->", "color": TEXT_2, "linewidth": 1.0}, zorder=1,
+    )
+    ax.text(3.4, 41, "priority", rotation=90, va="center", fontsize=7.5, color=TEXT_2)
+
+    box(4, 8, 46, 5.5, "deck.csv — Alakazam list (fixed all run)", fs=8.5)
+    badge(50, 10.8, "S3", _REJECTED)
+
+    # -- 오른쪽: 수술 범례 --
+    entries = [
+        ("S1", _SHIPPED, "H-024b light lethal graft", "raw-dict gate delegates instantly outside the\nlethal window (kills the 150–390 ms overhead)"),
+        ("S5", _SHIPPED, "H-036 tempo boss", "Boss's Orders 2262 → 6000 when the gust-kill\nis certain this turn (beats draw supporters)"),
+        ("S2", _REJECTED, "H-030 deck-out guard", "ban ACTIVATE draw prompts of all four\n3-card draw abilities when deck margin < 3"),
+        ("S4", _REJECTED, "H-035 stall guard", "stall_lock (turn ≥ 8, opp. 0 prizes, deck ≤ 18)\nfreezes every draw channel, draws only"),
+        ("S3", _REJECTED, "H-034 mirror list", "swap deck.csv to the reconstructed\nmirror-winner list (policy already supports it)"),
+    ]
+    ly = 66
+    for blabel, color, title, desc in entries:
+        badge(60, ly + 1.5, blabel, color)
+        ax.text(64, ly + 3.2, title, fontsize=8.5, fontweight="bold", color=TEXT, va="top")
+        ax.text(64, ly - 0.2, desc, fontsize=7.3, color=TEXT_2, va="top")
+        ly -= 11.5
+    ax.add_patch(plt.Rectangle((57, 2.5), 40, 8.2, facecolor="none", edgecolor=GRID, linewidth=1))
+    ax.add_patch(plt.Circle((60, 8.2), 1.6, facecolor=_SHIPPED, edgecolor="none"))
+    ax.text(62.5, 8.2, "in the final build (h036 = fork + S1 + S5)", fontsize=7.5, va="center")
+    ax.add_patch(plt.Circle((60, 4.8), 1.6, facecolor=_REJECTED, edgecolor="none"))
+    ax.text(62.5, 4.8, "won every local gate, did not translate to ladder", fontsize=7.5, va="center")
+
+    fig.tight_layout()
+    out = FIG_DIR / "fig_cascade_surgeries.png"
+    fig.savefig(out, dpi=200)
+    print(f"saved {out}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers(dest="command", required=True)
@@ -277,6 +500,13 @@ def main() -> None:
     field.add_argument("--our-deck", default="data/raw/episodes/majkel_lucario_deck.json")
     field.add_argument("--top", type=int, default=10)
     field.set_defaults(func=cmd_deck_field)
+
+    meta = commands.add_parser("meta")
+    meta.add_argument("--dumps", default="scratch/decks_*.json")
+    meta.set_defaults(func=cmd_meta)
+
+    cascade = commands.add_parser("cascade")
+    cascade.set_defaults(func=cmd_cascade)
 
     args = parser.parse_args()
     args.func(args)

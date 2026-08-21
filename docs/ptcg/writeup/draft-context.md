@@ -48,11 +48,17 @@
 
 | 그림 | 데이터 | 재생성 |
 |---|---|---|
-| A. 캐스케이드+5수술 부위 | fork_policy.py 구조 | 텍스트 다이어그램 (수기) |
+| A. 캐스케이드+5수술 부위 | fork_policy.py 구조 | ✅ **완료 (8/21)**: `figures/fig_cascade_surgeries.png`, `report_figures.py cascade` |
 | B. 빌드별 인스턴스 분포 | submissions/rating_history.tsv + 09-submission-log.md | 스트립 플롯 신규 (8/31) |
-| C. 메타 수렴 시계열 | scratch decks_*.json → `scripts/archetype_shares.py` (8/04·08·12·13·14·15 + 필요 시 추가 데일리) | 신규 (8/31) — ⚠️ 데일리 zip은 data/raw, 재다운로드 가능 |
+| C. 메타 수렴 시계열 | 데일리 zip 9개(8/04~08·12~15) → `mine_episodes.py deck-stats --out scratch/decks_*.json` → `report_figures.py meta` | ✅ **완료 (8/21)**: `figures/fig_meta_convergence.png` |
 | D. 좌석×아키타입 | 기존 fig_seat_split/fig_by_opponent | `scripts/report_figures.py seats/opponents` 갱신 |
 | E. 래더 궤적+이벤트 주석 | research_loop/ladder/*.json (i5 스파이크 포함 과거 sid도 fetch 가능) | `report_figures.py ladder` + 주석 |
+
+그림 C 수치 규약 (8/21 재생성, 초안 인용 시 주의):
+
+- 9개 데일리 전부를 정정판 규약(전량 집계, 분모=덱-게임)으로 재계산. 8/12~15 셰어는 결과 5 표와 일치. **결과 4의 8/04~08 값(구 파이프라인)은 그림과 다름** — 초안 본문은 그림 시계열을 인용할 것 (예: Dragapult 6.3→27.5%는 동일, Grimmsnarl은 30.9→9.5%로 쓰는 게 그림과 일치).
+- TV(6종 매핑, limitless 균형 대비)도 재계산: **0.407(8/04) → 0.431(8/06 정점) → 0.309(8/14) → 0.261(8/15)**. 문서의 구 수치 0.398/0.321을 대체. 초기(8/04~08)는 정체, **수렴은 8/12부터 가속** — "단조 수렴" 대신 "8/08 이후 단조"로 서술.
+- 그림 A 사실관계: 최종 빌드 h036 = fork + S1(H-024b 리썰 래퍼) + S5(boss_kill_now). 가드 3종(H-030/034/035)은 로컬 게이트 전승·래더 미번역으로 최종 미포함 (§5 정직 서사와 연결).
 
 ## 5. 정직한 실패 목록 (What Didn't Work — §7 재료)
 
