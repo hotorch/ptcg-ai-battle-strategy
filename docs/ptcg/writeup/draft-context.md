@@ -50,7 +50,7 @@
 |---|---|---|
 | A. 캐스케이드+5수술 부위 | fork_policy.py 구조 | ✅ **완료 (8/21)**: `figures/fig_cascade_surgeries.png`, `report_figures.py cascade` |
 | B. 빌드별 인스턴스 분포 | submissions/rating_history.tsv + 09-submission-log.md | 스트립 플롯 신규 (8/31) |
-| C. 메타 수렴 시계열 | 데일리 zip 9개(8/04~08·12~15) → `mine_episodes.py deck-stats --out scratch/decks_*.json` → `report_figures.py meta` | ✅ **완료 (8/21)**: `figures/fig_meta_convergence.png` |
+| C. 메타 수렴 시계열 | 데일리 zip 15개(8/04~08·12~21, 마감 후 6일 포함) → `mine_episodes.py deck-stats --out scratch/decks_*.json` → `report_figures.py meta` | ✅ **완료 (8/21, 8/22 마감 후 연장)**: `figures/fig_meta_convergence.png` — 8/30 확정 전 데일리 추가 시 동일 파이프라인 재실행 |
 | D. 좌석×아키타입 | 기존 fig_seat_split/fig_by_opponent | `scripts/report_figures.py seats/opponents` 갱신 |
 | E. 래더 궤적+이벤트 주석 | research_loop/ladder/*.json (i5 스파이크 포함 과거 sid도 fetch 가능) | `report_figures.py ladder` + 주석 |
 
@@ -59,6 +59,7 @@
 - 9개 데일리 전부를 정정판 규약(전량 집계, 분모=덱-게임)으로 재계산. 8/12~15 셰어는 결과 5 표와 일치. **결과 4의 8/04~08 값(구 파이프라인)은 그림과 다름** — 초안 본문은 그림 시계열을 인용할 것 (예: Dragapult 6.3→27.5%는 동일, Grimmsnarl은 30.9→9.5%로 쓰는 게 그림과 일치).
 - TV(6종 매핑, limitless 균형 대비)도 재계산: **0.407(8/04) → 0.431(8/06 정점) → 0.309(8/14) → 0.261(8/15)**. 문서의 구 수치 0.398/0.321을 대체. 초기(8/04~08)는 정체, **수렴은 8/12부터 가속** — "단조 수렴" 대신 "8/08 이후 단조"로 서술.
 - 그림 A 사실관계: 최종 빌드 h036 = fork + S1(H-024b 리썰 래퍼) + S5(boss_kill_now). 가드 3종(H-030/034/035)은 로컬 게이트 전승·래더 미번역으로 최종 미포함 (§5 정직 서사와 연결).
+- **마감 후 연장 실측 (8/22 추가, 예측→실현 완성)**: Dragapult 27.5→**32.9%**(8/21), **Grimmsnarl 0.7% = 균형(~0%) 도달**, Slowking 7.8→17.8%, Meganium 13.6→18.8%, 우리 Alakazam 13.0→9.2%(균형 4.9%로 수축 중), TV **0.254 신저점**. 결과 4의 예측("마감 후 풀은 더 Dragapult-heavy") 그대로 실현 — 그림 C의 화살표가 실측으로 대체됨. ⚠️ 8/17~18 요동은 매치메이킹 스로틀 구간(공식 수정 8/20, topic 735822) 표집 아티팩트 — 그림에 음영·주석 처리 완료, 본문 인용 시 8/20~21 값 사용.
 
 ## 5. 정직한 실패 목록 (What Didn't Work — §7 재료)
 
@@ -71,8 +72,10 @@
 ## 6. 지금부터 8/31까지 — 일일 수렴 루틴 (1분)
 
 ```bash
-uv run python scripts/watch_pair.py && uv run python scripts/kaggle_ops.py track-ratings
+uv run python scripts/watch_pair.py && uv run python scripts/kaggle_ops.py track-ratings && uv run python scripts/watch_rank.py
 ```
+
+- `watch_rank.py`(8/22 신설): LB 순위·팀 수·메달 컷을 `submissions/rank_history.tsv`에 기록. 계기 — 공식 anti-cheat 퍼지 공지(topic 735312)로 순위가 수동 상승 가능(8/16 6851팀 → 8/22 6809팀, 우리 1498→1395위, 브론즈 컷 840.4→834.5). Writeup 서두의 최종 순위·컷 수치가 여기서 나온다.
 
 - 주 2회쯤 `report_figures.py fetch-ladder --submission-ids 55525772,55525773`로 에피소드 원본 갱신.
 - 관측 포인트: ① 수렴 속도(마감 후 경기/일 — 8/17 오전 기준 idle 2.5~3.4h로 완만) ② i8/i9 격차의 수렴(동일 코드 두 인스턴스가 같은 값으로 모이는가 = 분포 방법론의 최종 검증) ③ 8/30경 최종 확정치.

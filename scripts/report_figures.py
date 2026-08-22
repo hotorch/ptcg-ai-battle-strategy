@@ -342,11 +342,28 @@ def cmd_meta(args: argparse.Namespace) -> None:
                 fontsize=8,
                 fontweight="bold",
             )
+    deadline = dt.date(2026, 8, 16)
+    if dates[-1] > deadline:
+        for a in (ax, ax_tv):
+            a.axvline(deadline, color=TEXT_2, linewidth=1.0, linestyle="--", alpha=0.7)
+            # 8/17~19 데일리는 매치메이킹 스로틀 구간(공식 수정 8/20, topic 735822)
+            # 의 표집이라 상위 풀 구성이 흔들린다 — 아티팩트임을 그림에 명시.
+            a.axvspan(dt.date(2026, 8, 16, ), dt.date(2026, 8, 19), color=GRID, alpha=0.45, zorder=0)
+        ax.annotate(
+            "submission deadline",
+            (deadline, -3), ha="right", va="bottom", rotation=90,
+            color=TEXT_2, fontsize=7.5, xytext=(-3, 0), textcoords="offset points",
+        )
+        ax.annotate(
+            "matchmaking\nthrottled\n(fixed 8/20)",
+            (dt.date(2026, 8, 17) + dt.timedelta(hours=12), 45), ha="center", va="top",
+            color=TEXT_2, fontsize=7,
+        )
     ax.set_xlim(dates[0] - dt.timedelta(days=0.5), dates[-1] + dt.timedelta(days=5.2))
     ax.set_ylim(-4, 47)
     ax.set_ylabel("share of top-pool deck-games (%)")
     ax.set_title("Top-pool meta converges toward the external (limitless) equilibrium", fontsize=10)
-    ax.legend(frameon=False, fontsize=8, ncol=2, loc="upper center")
+    ax.legend(frameon=False, fontsize=8, ncol=2, loc="upper left")
     ax.set_xticks(dates)
     ax.set_xticklabels([d.strftime("%m/%d") for d in dates], fontsize=8)
     ax_tv.tick_params(axis="x", labelrotation=45)
