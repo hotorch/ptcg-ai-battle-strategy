@@ -679,3 +679,53 @@ checked_at_utc	submission_id	status	public_score	description
 20260828T001320Z	55276394	COMPLETE	488.4	20260805-H010-03: pure Lopunny v2 (merged-train + can-attack key), full 64.2% vs 5-pool, fixes early
 20260828T001320Z	55271863	COMPLETE	326.9	20260805-H010-01: Lopunny+Froslass replay-distilled, full 56.6% vs 5-pool
 20260828T001320Z	55271857	COMPLETE	488.2	20260805-H010-02: pure Lopunny replay-distilled, full 61.4% vs 5-pool
+20260829T061048Z	55525773	COMPLETE	724.8	20260815-H036-i9: wave-4 pair partner — lock pair after ~21:30 read; instance 9
+20260829T061048Z	55525772	COMPLETE	741.3	20260815-H036-i8: wave-4 final planned draw — wave 3 read worst yet (48.5/48.4% sub-700s), zero-cost
+20260829T061048Z	55520606	COMPLETE	674.0	20260815-H036-i7: wave-3 pair partner — lock-day fishing, read at +4h then wave-4 decision; instance
+20260829T061048Z	55520603	COMPLETE	697.7	20260815-H036-i6: wave-3 fishing — actives were mid-band (i4 734.6/59.6%, i5 750.1/42.4%), refiring 
+20260829T061048Z	55515319	COMPLETE	750.1	20260815-H036-i5: expiring-slot free draw — evicts weakest active i3 (680/50.0% over 38g), pairs wit
+20260829T061048Z	55503497	COMPLETE	728.9	20260814-H036-i4: wave-2 pair partner — h036 ladder distribution to n=4 for tomorrow's final lock de
+20260829T061048Z	55503494	COMPLETE	680.0	20260814-H036-i3: wave-2 fishing instance — wave-1 pair read mid-band (749/756 at +9h, pooled 58.3%)
+20260829T061048Z	55494554	COMPLETE	743.8	20260814-H036-i2: second tempo-boss instance — pair sampling for +3h/evening reads before 8/15 final
+20260829T061048Z	55494551	COMPLETE	754.9	20260814-H036-i1: tempo boss on h024b (boss_kill_now 6000 when gust-kill certain this turn; replay 2
+20260829T061048Z	55482095	COMPLETE	718.0	20260813-H024b-i7: second same-day control instance — i6 read 818.4 settled (55.0% over 40g); testin
+20260829T061048Z	55482092	COMPLETE	657.5	20260813-H035-i3: third stall-guard instance — i2 read 690 climbing (56.3% over 32g), i1 scheduling-
+20260829T061048Z	55475620	COMPLETE	825.4	20260813-H024b-i6: FIELD INFLATION CONTROL — identical 8/10 build resubmitted 3 days later (8/10 ins
+20260829T061048Z	55475619	COMPLETE	714.8	20260813-H035-i2: second instance of stall guard — pair sampling for +3h read and distribution vs h0
+20260829T061048Z	55475616	COMPLETE	600.0	20260813-H035-i1: stall guard on h034 (turn>=8, opp 0 prizes, deck<=18 -> preserve draws; covers 17%
+20260829T061048Z	55456276	COMPLETE	725.6	20260812-H034-i1: V1 mirror-winner list (26 teams' exact 60, beats old list 21-5 on ladder) on h030 
+20260829T061048Z	55451348	COMPLETE	692.2	20260812-H030-i4: fourth instance — completes today's distribution study of the fishing build before
+20260829T061048Z	55451343	COMPLETE	753.8	20260812-H030-i3: third instance — pair +3h read 747.8/751.8 in normal band, expanding distribution 
+20260829T061048Z	55447908	COMPLETE	761.0	20260812-H030-i2: second instance of deck-out guard build — instance pair for +3h read vs h024b n=5 
+20260829T061048Z	55447905	COMPLETE	747.8	20260812-H030-i1: deck-out guard on h024b (ACTIVATE draw ban at margin<3; ladder replay: ban-zone YE
+20260829T061048Z	55442768	COMPLETE	739.7	20260812-H024b-i5: fifth instance of light lethal graft (n=4 mean 782 vs h029a 738) — fishing-build 
+20260829T061048Z	55429878	COMPLETE	765.1	20260811-H029a-i4: fourth instance of relaxed lethal window — completes n=4 distribution study for f
+20260829T061048Z	55429876	COMPLETE	773.2	20260811-H029a-i3: third instance of relaxed lethal window — building n=4 instance distribution vs h
+20260829T061048Z	55422392	COMPLETE	686.1	20260811-H029a-i2: second instance of relaxed lethal window — pair sampling for band estimate
+20260829T061048Z	55422386	COMPLETE	747.4	20260811-H029a-i1: relaxed lethal window (prize<=4, 3.0s budget; 56.7% vs h024b over 60g, meta0d 82.
+20260829T061048Z	55408468	COMPLETE	711.0	20260810-H024b-i4: fourth instance — completes today's 4-sample instance-distribution study of the l
+20260829T061048Z	55408461	COMPLETE	793.6	20260810-H024b-i3: third instance (distribution samples so far: 864.6, 772.8) — instance-variance st
+20260829T061048Z	55398409	COMPLETE	778.9	20260810-H024b-i2: second instance of light lethal graft (i1 at 863 @23g, peak 902.8, above bronze c
+20260829T061048Z	55396840	COMPLETE	844.7	20260810-H024b-i1: light lethal graft (raw-dict window gate, falsy-0 fix; mirror 62.5% vs vanilla, m
+20260829T061048Z	55396834	COMPLETE	744.4	20260810-H022-i3: vanilla fork anchor restore (prior instances 818.8/786; displacing H-024 645-band)
+20260829T061048Z	55377129	COMPLETE	640.1	20260809-H024-i2: second instance of lethal-graft (instance-distribution sampling)
+20260829T061048Z	55377126	COMPLETE	688.4	20260809-H024-i1: fork policy + verified lethal-commit graft (gate 57.5% vs vanilla; probes prize<=3
+20260829T061048Z	55376233	COMPLETE	786.2	20260809-H022-i2: fork second instance (i1 at 818.8 @40g, bronze cut 841.6) — instance-distribution 
+20260829T061048Z	55371296	COMPLETE	628.4	20260809-H020-i2: second instance of h020_combo (627 @39g first instance) — instance-mean sampling f
+20260829T061048Z	55371290	COMPLETE	818.8	20260809-H022: vanilla fork of public Rozen V10 baseline (Dragapult build, credited) — account-level
+20260829T061048Z	55356948	COMPLETE	610.2	20260808-H017b-reinstance: best-ever converged build (667 @35g) second instance; replaces H-019 (564
+20260829T061048Z	55349987	COMPLETE	620.6	20260808-H020: h019 code + 4-day data refresh (meta0d 70% field-weighted edge, h2h 57.5% vs h019; mi
+20260829T061048Z	55349944	COMPLETE	563.8	20260808-H019: lethal-line commit + prize inference on h017d search (mirror 62.5% vs h017d, meta0d 6
+20260829T061048Z	55327512	COMPLETE	517.7	20260807-H017-07 dup: same H-017d build, second instance to double ladder sampling overnight (first 
+20260829T061048Z	55326028	COMPLETE	654.4	20260807-H017-07: reply-table opponent model in search leaves (H-015 table in _greedy_reply), 75% vs
+20260829T061048Z	55323710	COMPLETE	667.0	H-017b: subselect search + 3-horizon leaf (self rollout), overage-adaptive budget
+20260829T061048Z	55310316	COMPLETE	601.5	20260807-H016-01: 3-day retrained value (AUC .742, 232k states) + refreshed distill/meta priors, bea
+20260829T061048Z	55309394	COMPLETE	511.6	20260807-H014-01: search + learned value function (AUC .736, 200k replay states), full 83.6% vs 5-po
+20260829T061048Z	55295423	COMPLETE	586.9	20260806-H012-01: turn search on Majkel Lucario deck + mirror-adaptive fallback, full 79.0% vs 5-poo
+20260829T061048Z	55292598	COMPLETE	484.7	20260806-H010-04b: resubmit 2-day redistill (slot restore; was rating 571 as 55289458)
+20260829T061048Z	55292584	COMPLETE	542.8	20260806-H011-03: evolution-aware eval (stage value + energy progress), full 67.2% vs 5-pool, fixes 
+20260829T061048Z	55289463	COMPLETE	411.0	20260806-H011-02: determinized turn search + distilled prior + matchup-adaptive fallback, full 65.0%
+20260829T061048Z	55289458	COMPLETE	571.4	20260806-H010-04: pure Lopunny 2-day redistill (151k decisions), quick 71% vs 4-pool
+20260829T061048Z	55276394	COMPLETE	488.4	20260805-H010-03: pure Lopunny v2 (merged-train + can-attack key), full 64.2% vs 5-pool, fixes early
+20260829T061048Z	55271863	COMPLETE	326.9	20260805-H010-01: Lopunny+Froslass replay-distilled, full 56.6% vs 5-pool
+20260829T061048Z	55271857	COMPLETE	488.2	20260805-H010-02: pure Lopunny replay-distilled, full 61.4% vs 5-pool
