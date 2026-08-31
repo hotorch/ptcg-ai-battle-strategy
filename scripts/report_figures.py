@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import urllib.request
 from pathlib import Path
 
@@ -493,6 +494,283 @@ def cmd_cascade(args: argparse.Namespace) -> None:
     print(f"saved {out}")
 
 
+RATING_HISTORY = ROOT / "submissions" / "rating_history.tsv"
+PAIR_CONVERGENCE = ROOT / "submissions" / "pair_convergence.tsv"
+BUILD_RE = re.compile(r"^(?:\d{8}-)?(H-?[A-Za-z0-9]+?)(?:-\d+)?\s*[:—-]")
+
+
+def _build_key(description: str) -> str:
+    m = BUILD_RE.match(description or "")
+    return m.group(1).replace("-", "").upper() if m else "?"
+
+
+def _build_families() -> tuple[dict[str, list[float]], dict[str, str]]:
+    """rating_history.tsv의 제출별 최신 레이팅을 빌드 가족으로 묶는다."""
+    import csv
+
+    latest: dict[str, dict] = {}
+    order: dict[str, str] = {}
+    with RATING_HISTORY.open(encoding="utf-8") as f:
+        for row in csv.DictReader(f, delimiter="\t"):
+            if row["public_score"]:
+                latest[row["submission_id"]] = row
+    families: dict[str, list[float]] = {}
+    for row in latest.values():
+        key = _build_key(row["description"])
+        families.setdefault(key, []).append(float(row["public_score"]))
+        stamp = (row["description"] or "")[:8]
+        if key not in order or stamp < order[key]:
+            order[key] = stamp
+    return families, order
+
+
+def cmd_dist(args: argparse.Namespace) -> None:
+    """그림 B: 빌드별 인스턴스 레이팅 분포 스트립 플롯."""
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
+    families, order = _build_families()
+    keys = sorted(families, key=lambda k: (order.get(k, "99999999"), k))
+    total = sum(len(v) for v in families.values())
+
+    fig, ax = plt.subplots(figsize=(9.5, 4.6))
+    rng_state = 12345
+    for i, key in enumerate(keys):
+        vals = families[key]
+        # 결정론적 지터(재현성 보장 — Math.random 불가 원칙과 동일 취지)
+        jitter = [((rng_state * (j + 7) * (i + 3)) % 41 - 20) / 190.0 for j in range(len(vals))]
+        big = len(vals) >= 5
+        ax.scatter(
+            [i + dx for dx in jitter],
+            vals,
+            s=44 if big else 30,
+            color=SERIES[0] if big else TEXT_2,
+            alpha=0.85 if big else 0.45,
+            zorder=3,
+            linewidths=0,
+        )
+        if len(vals) >= 3:
+            lo, hi = min(vals), max(vals)
+            ax.plot([i, i], [lo, hi], color=SERIES[0] if big else GRID, linewidth=1.4, zorder=2)
+            mean = sum(vals) / len(vals)
+            ax.plot(
+                [i - 0.26, i + 0.26],
+                [mean, mean],
+                color=SERIES[1],
+                linewidth=2.2,
+                zorder=4,
+                solid_capstyle="butt",
+            )
+            if big:
+                ax.annotate(
+                    f"n={len(vals)}\nspread {hi - lo:.0f}",
+                    (i, hi),
+                    textcoords="offset points",
+                    xytext=(0, 9),
+                    ha="center",
+                    fontsize=8,
+                    color=TEXT_2,
+                )
+
+    # 마감 후 수렴 페어를 별도 마커로 겹쳐 그린다.
+    pair = _final_pair()
+    if pair and "H036" in keys:
+        x = keys.index("H036")
+        ax.scatter(
+            [x, x],
+            pair,
+            marker="*",
+            s=210,
+            color=SERIES[2],
+            zorder=6,
+            linewidths=0,
+            label=f"final pair after 1,000 games each (gap {abs(pair[0] - pair[1]):.1f})",
+        )
+        ax.legend(frameon=False, loc="lower right", fontsize=9)
+
+    ax.set_xticks(range(len(keys)))
+    ax.set_xticklabels(keys, rotation=60, ha="right", fontsize=8)
+    ax.set_ylabel("final ladder rating")
+    ax.set_xlabel(f"build (chronological) — {total} submissions across {len(keys)} builds")
+    ax.set_title(
+        "Every build is a distribution: identical code, repeated submissions",
+        fontsize=11,
+        loc="left",
+        pad=14,
+    )
+    fig.tight_layout()
+    out = FIG_DIR / "fig_build_distribution.png"
+    fig.savefig(out, dpi=200)
+    print(f"saved {out}")
+    for key in keys:
+        vals = sorted(families[key])
+        if len(vals) >= 3:
+            mean = sum(vals) / len(vals)
+            print(f"  {key:<8} n={len(vals):<2} {vals[0]:6.1f}~{vals[-1]:6.1f} mean={mean:6.1f} spread={vals[-1] - vals[0]:5.1f}")
+
+
+OPPONENT_LABELS = {
+    "candidates/h024b_light": "mirror\n(previous build)",
+    "candidates/opp_meta0d": "distilled-opponent\ngate",
+    "candidates/opp_grimmsnarl": "counter-archetype\nproxy",
+}
+
+
+def cmd_matrix(args: argparse.Namespace) -> None:
+    """그림 D: 좌석 × 상대 승률 행렬. 두 좌석 모두에서 성립하는지가 강건성 주장의 핵심."""
+    import collections
+
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
+    runs = _load_runs(args.runs)
+    cells: dict[tuple[str, int], collections.Counter] = collections.defaultdict(collections.Counter)
+    for run in runs:
+        for rec in run["records"]:
+            cells[(rec["opponent"], int(rec["candidate_seat"]))][rec["outcome"]] += 1
+
+    opponents = sorted({k[0] for k in cells}, key=lambda o: OPPONENT_LABELS.get(o, o))
+    fig, ax = plt.subplots(figsize=(6.4, 0.9 * len(opponents) + 2.0))
+    for j, opp in enumerate(opponents):
+        for seat in (0, 1):
+            c = cells.get((opp, seat))
+            if not c:
+                continue
+            games = sum(c.values())
+            wr = c["win"] / games if games else 0.0
+            # 0.5를 중심으로 발산 색상: 파랑(우세) / 주황(열세)
+            mag = min(abs(wr - 0.5) / 0.35, 1.0)
+            color = SERIES[0] if wr >= 0.5 else SERIES[1]
+            ax.barh(j + (seat - 0.5) * 0.38, 1.0, height=0.34, color=GRID, zorder=1)
+            ax.barh(j + (seat - 0.5) * 0.38, wr, height=0.34, color=color, alpha=0.25 + 0.65 * mag, zorder=2)
+            ax.annotate(
+                f"seat {seat}   {wr * 100:.1f}%   n={games}",
+                (0.015, j + (seat - 0.5) * 0.38),
+                va="center",
+                fontsize=9,
+                color=TEXT,
+                zorder=3,
+            )
+    ax.axvline(0.5, color=TEXT_2, linewidth=1.0, linestyle="--", zorder=4)
+    ax.set_yticks(range(len(opponents)))
+    ax.set_yticklabels([OPPONENT_LABELS.get(o, Path(o).name) for o in opponents], fontsize=9)
+    ax.set_xlim(0, 1)
+    ax.set_xlabel("win rate (dashed line = 50%)")
+    ax.invert_yaxis()
+    ax.grid(False)
+    ax.set_title(
+        "Every gate, both seats — and the two that saturated",
+        fontsize=10,
+        loc="left",
+        pad=12,
+    )
+    fig.tight_layout()
+    out = FIG_DIR / "fig_seat_matrix.png"
+    fig.savefig(out, dpi=200)
+    print(f"saved {out}")
+    for opp in opponents:
+        for seat in (0, 1):
+            c = cells.get((opp, seat))
+            if c:
+                g = sum(c.values())
+                print(f"  {Path(opp).name:<18} seat{seat}  {c['win'] / g * 100:5.1f}%  n={g}")
+
+
+def cmd_convergence(args: argparse.Namespace) -> None:
+    """그림 E: 좌 = sticky placement 스파이크, 우 = 동일 코드 페어의 1,000경기 수렴."""
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
+    spike_sid = int(args.spike)
+    pair_sids = [int(s) for s in args.pair.split(",")]
+
+    fig, (ax_l, ax_r) = plt.subplots(1, 2, figsize=(10, 3.9), gridspec_kw={"width_ratios": [1, 2.1]})
+
+    rows = _ladder_rows(spike_sid)
+    ratings = [r["rating"] for r in rows]
+    ax_l.plot(range(1, len(ratings) + 1), ratings, color=SERIES[3], linewidth=2)
+    if ratings:
+        peak = max(ratings)
+        peak_x = ratings.index(peak) + 1
+        ax_l.annotate(
+            f"{peak:.0f} after a 4–1 start",
+            (peak_x, peak),
+            textcoords="offset points",
+            xytext=(6, 4),
+            fontsize=8,
+            color=TEXT_2,
+        )
+        ax_l.annotate(
+            f"{ratings[-1]:.0f} by game {len(ratings)}",
+            (len(ratings), ratings[-1]),
+            textcoords="offset points",
+            xytext=(-10, -14),
+            ha="right",
+            fontsize=8,
+            color=TEXT_2,
+        )
+    ax_l.set_title("Placement luck is amortized, not banked", fontsize=10, loc="left")
+    ax_l.set_xlabel("ladder game #")
+    ax_l.set_ylabel("rating")
+
+    finals, series = [], []
+    for i, sid in enumerate(pair_sids):
+        rows = _ladder_rows(sid)
+        ratings = [r["rating"] for r in rows]
+        if not ratings:
+            continue
+        finals.append(ratings[-1])
+        series.append(ratings)
+        ax_r.plot(range(1, len(ratings) + 1), ratings, color=SERIES[i], linewidth=0.7, alpha=0.35)
+        window = 101
+        smooth = [
+            sum(ratings[max(0, k - window + 1) : k + 1]) / len(ratings[max(0, k - window + 1) : k + 1])
+            for k in range(len(ratings))
+        ]
+        mean = sum(ratings) / len(ratings)
+        ax_r.plot(
+            range(1, len(ratings) + 1),
+            smooth,
+            color=SERIES[i],
+            linewidth=2.2,
+            label=f"instance {i + 8} — 1,000-game mean {mean:.1f}",
+        )
+
+    if len(series) == 2:
+        n = min(len(series[0]), len(series[1]))
+        gaps = [abs(series[0][k] - series[1][k]) for k in range(n)]
+        mean_gap = abs(sum(series[0]) / len(series[0]) - sum(series[1]) / len(series[1]))
+        ax_r.annotate(
+            f"difference in 1,000-game means: {mean_gap:.1f}\n"
+            f"same-moment gap: mean {sum(gaps) / n:.1f}, max {max(gaps):.1f}",
+            (0.985, 0.06),
+            xycoords="axes fraction",
+            ha="right",
+            va="bottom",
+            fontsize=8.5,
+            color=TEXT,
+        )
+
+    ax_r.set_title(
+        "…but 1,000 games buys a band, not a point estimate",
+        fontsize=10,
+        loc="left",
+    )
+    ax_r.set_xlabel("post-deadline ladder game #")
+    ax_r.legend(frameon=False, loc="upper left", fontsize=8)
+
+    fig.tight_layout()
+    out = FIG_DIR / "fig_convergence.png"
+    fig.savefig(out, dpi=200)
+    print(f"saved {out}")
+
+
+def _final_pair() -> list[float]:
+    """pair_convergence.tsv의 마지막 스냅샷에서 i8/i9 최종 레이팅을 읽는다."""
+    if not PAIR_CONVERGENCE.exists():
+        return []
+    lines = [ln.strip().split("\t") for ln in PAIR_CONVERGENCE.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    body = [ln for ln in lines if len(ln) > 3 and ln[0][:1].isdigit()]
+    if len(body) < 2:
+        return []
+    stamp = body[-1][0]
+    return [float(ln[3]) for ln in body if ln[0] == stamp]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers(dest="command", required=True)
@@ -524,6 +802,18 @@ def main() -> None:
 
     cascade = commands.add_parser("cascade")
     cascade.set_defaults(func=cmd_cascade)
+
+    dist = commands.add_parser("dist")
+    dist.set_defaults(func=cmd_dist)
+
+    matrix = commands.add_parser("matrix")
+    matrix.add_argument("--runs", nargs="+", required=True)
+    matrix.set_defaults(func=cmd_matrix)
+
+    conv = commands.add_parser("convergence")
+    conv.add_argument("--pair", default="55525772,55525773")
+    conv.add_argument("--spike", default="55515319")
+    conv.set_defaults(func=cmd_convergence)
 
     args = parser.parse_args()
     args.func(args)
