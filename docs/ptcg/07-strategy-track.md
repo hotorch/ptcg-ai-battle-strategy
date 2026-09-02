@@ -76,3 +76,23 @@ Writeup의 메타 분석 장(章)에 넣을 뼈대. 근거 데이터·수치는 
 5. **도표 후보**: 점유율 시계열 라인차트(6종+기타), TV 거리 감소 곡선, 매치업 재가중 기대승률의 시점별 변화.
 
 리스크 노트: limitless 점유율은 대회 점수(points) 기준이라 게임 수 기반 래더 점유율과 정의가 다름 — Writeup에는 "방향 일치의 증거"로 쓰고 절대 수치 비교는 피할 것.
+
+## 2026-09-02 호스트 답변 확인 — 단어 수 산정 범위·Pokémon Elements (Strategy 토론)
+
+출처: Strategy 트랙 토론 735679(8/26 답변), 738324(8/31 답변), 738657(9/1 답변). 답변자 전부 Addison Howard(Kaggle 호스트).
+
+- **단어 수 = 본문(main body)만.** Media Gallery는 포함되지 않음(735679). **그림·표 안의 텍스트는 세지 않음**(738657). 취지는 "본문 단락을 이미지로 숨기지 말라"는 것이며, 초과분이 "graphic footnotes" 수준이면 감점 가능성 낮음(738657 원문: "you're unlikely to face penalty if your overages are simply graphic footnotes or the like").
+- **셈 방식 = 공백 구분 표준 단어 수**(738324). 다단어 카드명은 단어 수만큼 센다. → 로컬 프록시는 `wc -w`가 맞고, 대시 분리 계산은 과대 추정.
+- **덱리스트**: 이미지 또는 CSV/Kaggle dataset 첨부로 제출 가능, 단어 수 미포함, 우회로 간주되지 않음(738657). → 733067 미해결 항목 해소.
+- **Pokémon Elements**: 본문에서 카드명·보드 상황·카드 상호작용 언급 **허용·권장**. 공식 비주얼라이저가 제공한 형식의 카드 아트워크 사용도 허용(738657). 금지는 Elements의 변형·신규 창작·유사 게임 제작. → 8/17 킥오프 킷의 "카드 이미지 첨부 = 실격"과 outline의 "카드명 최소화" 방침은 **과잉 보수**였음. 자체 차트만 쓰는 현재 그림 5장은 어차피 안전하며, 카드명 언급 제한을 풀어도 됨.
+- 참가 규모: Strategy 570팀(9/2, 로그아웃 상태 페이지 표시). Entry Deadline **9/6 23:59 UTC** — 규칙 수락 상태를 로그인 후 재확인할 것(8/8 userHasEntered=True 기록 있음).
+
+초안 반영: draft-2 본문 wc 1,991(캡션 5개 ~100단어 포함). 그림 캡션을 Media Gallery로 옮기면 본문 ~1,890. 표는 단어 수에서 제외되므로 표 2(세대별 아블레이션)를 무료로 복원 가능.
+
+### 9/2 추가 — Writeup 편집 폼 실측 (Chrome 로그인 상태)
+
+- 폼 구조: Title(80자, 저장 필수) / URL slug / Subtitle(140자) / Track(Main 자동) / **Media Gallery**("Add videos or photos", 동영상은 YouTube만) / **Project Description**(마크다운 편집기, 하단에 "N Words" 카운터) / Attachments(링크·파일 100MB·DOI 옵트인). 제출 체크리스트 4항목 = Title, Subtitle, Track, Project Description.
+- 마크다운 편집기 "..." 메뉴: Insert table, Upload image, Embed image, Embed YouTube, Preview, Markdown docs → **그림을 본문에 직접 삽입 가능**(Media Gallery와 별개).
+- **카운터 실측 = 순수 공백 토큰 수.** `one two—three four-five six/seven 8.3 (eight) Boss's Orders` → 8 Words (대시 결합어는 1단어). 마크다운 표 `| alpha | beta |` 등 3행 + `![caption words here](url)` + `**bold** \`code\`` → 19 Words: **파이프 `|`와 `|---|---|`도 각각 1단어, 이미지 alt 텍스트도 계산됨.** 호스트 규정(표·그림 내 텍스트 제외)과 폼 카운터는 다르다 — 심사자가 카운터 숫자를 볼 가능성을 감안해 **카운터 기준 ≤2,000도 함께 맞추는 게 안전**. 마크다운 표는 파이프 때문에 크게 부풀므로(4열 9행 ≈ +50 토큰) 표는 이미지로 Media Gallery/본문 삽입 권장.
+- 부작용: "New Writeup" 클릭만으로 빈 draft가 자동 생성됨(취소해도 남음). 9/2 현재 "New Writeup" 제목의 빈 draft 3개 존재 → 카드 ⋮ 메뉴에서 정리 필요(1개만 남기고 그 안에 최종본 작성).
+- 마감 표시: Sep 14, 2026 8:59 AM KST (= 9/13 23:59 UTC).
