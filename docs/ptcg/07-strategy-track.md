@@ -96,3 +96,11 @@ Writeup의 메타 분석 장(章)에 넣을 뼈대. 근거 데이터·수치는 
 - **카운터 실측 = 순수 공백 토큰 수.** `one two—three four-five six/seven 8.3 (eight) Boss's Orders` → 8 Words (대시 결합어는 1단어). 마크다운 표 `| alpha | beta |` 등 3행 + `![caption words here](url)` + `**bold** \`code\`` → 19 Words: **파이프 `|`와 `|---|---|`도 각각 1단어, 이미지 alt 텍스트도 계산됨.** 호스트 규정(표·그림 내 텍스트 제외)과 폼 카운터는 다르다 — 심사자가 카운터 숫자를 볼 가능성을 감안해 **카운터 기준 ≤2,000도 함께 맞추는 게 안전**. 마크다운 표는 파이프 때문에 크게 부풀므로(4열 9행 ≈ +50 토큰) 표는 이미지로 Media Gallery/본문 삽입 권장.
 - 부작용: "New Writeup" 클릭만으로 빈 draft가 자동 생성됨(취소해도 남음). 9/2 현재 "New Writeup" 제목의 빈 draft 3개 존재 → 카드 ⋮ 메뉴에서 정리 필요(1개만 남기고 그 안에 최종본 작성).
 - 마감 표시: Sep 14, 2026 8:59 AM KST (= 9/13 23:59 UTC).
+
+## 2026-09-08 재스캔 실측 — 규모·가중치·제출 위험
+
+- 참가 **679팀 / 747명** (9/2 570 → 9/8 679). Finalist 8팀 = 1.2%. 마감 표시 Sep 14 08:59 KST(= 9/13 23:59 UTC).
+- Kaggle 스태프(738058): 시뮬 점수는 "weighted highly enough" / "a significant portion of your score" → ⑤ 실질 가중치가 균등 1/9보다 큼. (738791 댓글): 최종 LB 점수는 Strategy 점수의 입력이며 **순위 분산을 writeup에서 지적해도 좋다** → §4 인용 완료.
+- **우리 계정 Writeups 탭에 빈 DRAFT 3개** — 제출 전 삭제. 버그 신고 739855(제출본이 정체불명 draft로 덮임) → 제출 후 SUBMITTED 상태 재확인·스크린샷.
+- 상세: [research/2026-09-08-solution-scan.md](research/2026-09-08-solution-scan.md)
+

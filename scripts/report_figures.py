@@ -486,7 +486,7 @@ def cmd_cascade(args: argparse.Namespace) -> None:
     ax.add_patch(plt.Circle((60, 8.2), 1.6, facecolor=_SHIPPED, edgecolor="none"))
     ax.text(62.5, 8.2, "in the final build (h036 = fork + S1 + S5)", fontsize=7.5, va="center")
     ax.add_patch(plt.Circle((60, 4.8), 1.6, facecolor=_REJECTED, edgecolor="none"))
-    ax.text(62.5, 4.8, "won every local gate, did not translate to ladder", fontsize=7.5, va="center")
+    ax.text(62.5, 4.8, "passed every local gate, did not translate to ladder", fontsize=7.5, va="center")
 
     fig.tight_layout()
     out = FIG_DIR / "fig_cascade_surgeries.png"
@@ -716,7 +716,7 @@ def cmd_convergence(args: argparse.Namespace) -> None:
         finals.append(ratings[-1])
         series.append(ratings)
         ax_r.plot(range(1, len(ratings) + 1), ratings, color=SERIES[i], linewidth=0.7, alpha=0.35)
-        window = 101
+        window = 100
         smooth = [
             sum(ratings[max(0, k - window + 1) : k + 1]) / len(ratings[max(0, k - window + 1) : k + 1])
             for k in range(len(ratings))
