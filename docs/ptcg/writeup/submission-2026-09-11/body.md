@@ -12,7 +12,7 @@ We picked the deck by mining daily replay exports for deck signatures and top-po
 
 **The concept is one axis: keep your hand big.** The attacker is Alakazam, a Stage 2 whose damage scales with hand size (20 per card held), on a 4-4-4 Abra–Kadabra–Alakazam line with 3 Rare Candy to skip the middle stage. The support line is a Dunsparce–Dudunsparce draw engine, and 4 Telepath Psychic Energy bring the attacker online off one attachment. Every remaining slot serves that axis: draw supporters, recovery, energy denial to buy setup turns, and 3 Boss's Orders to convert a big hand into a prize.
 
-**Key-card alignment is literal**, because the policy's numeric priorities *are* the deck plan (Figure A). Rare Candy sits at 16,000 because skipping Kadabra is the deck's tempo. Draw supporters outrank almost everything. Boss's Orders is the *only* card allowed to outrank drawing, and only when arithmetic proves it wins the exchange this turn.
+**Key-card alignment is literal**, because the policy's numeric priorities *are* the deck plan (Figure A). Rare Candy sits at 16,000 because skipping Kadabra is the deck's tempo. Draw supporters outrank almost everything. Boss's Orders is the *only* Supporter allowed to outrank a draw Supporter, and only when arithmetic proves it wins the exchange this turn.
 
 **What we learned too late.** By the second week the first- and third-most-played archetypes in the top pool were the two *worst*-performing — a crowd-pick paradox. Ours was one of them (13% share, 44% win rate). An independent post-deadline audit of 23,313 games (Discussion 737107) confirms the skew: 11.4% of the field, but only 6.9% of the top decile.
 
@@ -20,9 +20,9 @@ We kept it for a quantitative reason: the policy is tuned to this deck's card ID
 
 ## 3. How the Agent Decides — and Why Only Two of Five Surgeries Shipped
 
-The agent is a **deterministic priority cascade**. Every legal action is scored by a hand-written function of board state; the highest plays; the turn ends when nothing scores positive. No tree search, no learned model — we built both and both lost (§7).
+The agent is a **priority cascade**. Every legal action is scored by a hand-written function of board state; the highest plays; the turn ends when nothing scores positive. The fork's only lookahead is a shallow 2-ply determinized check on main-phase choices; no learned model; our own deeper search with a learned evaluator lost (§7).
 
-Onto the forked skeleton we attempted five surgeries. Two shipped: **S1**, a light lethal graft (our earlier lethal search takes the turn only when we hold ≤3 prizes; otherwise the fork plays instantly), and **S5**, the tempo gust (mirror 50.0%, n=60; meta 85.0%, n=40; counter-archetype proxy 100%, n=40). Three — **S2** deck-out guard, **S3** mirror-list adaptation, **S4** stall guard — **passed every local no-regression gate (S2's mirror was a 29–31 tie) and never shipped**, because their submission families never cleared the incumbent's ladder band (§4).
+Onto the forked skeleton we attempted five surgeries. Two shipped: **S1**, a light lethal graft (our earlier lethal search takes the turn only when we hold ≤3 prizes; otherwise the fork decides), and **S5**, the tempo gust (mirror 50.0%, n=60; meta 85.0%, n=40; counter-archetype proxy 100%, n=40). Three — **S2** deck-out guard, **S3** mirror-list adaptation, **S4** stall guard — **passed every local no-regression gate (S2's mirror was a 29–31 tie) and never shipped**, because their submission families never cleared the incumbent's ladder band (§4).
 
 **Worked example (S5).** The fork scores the gust supporter *below* draw supporters, usually correctly. But a gust that converts into a same-turn knockout is not a card — it is a prize. S5 adds one guarded branch. It fires only when the attacker is evolved and energized, the target is reachable and killable, and — the clause that makes it safe — the hand *after* paying for the gust still deals lethal:
 
@@ -51,15 +51,15 @@ Three mechanisms, each measured:
 2. **New-submission scheduling priority.** In one window a fresh submission played 32 games while an older one played 1; same-day is not same-sample.
 3. **Drift control.** An identical build resubmitted three days later scored 825.4 against a pre-period mean of 782 (n = 4). Inside the band: rating inflation rejected, not assumed.
 
-**The closing experiment.** We locked two instances of one build as our final pair and watched 1,000 post-deadline games each (Figure E, right). Their 1,000-game means differ by **5.8**, against a same-build spread of 134 at ~50 games. But convergence buys a *band*, not a point: at matched game counts the two sat 19.8 points apart on average, up to 75.6, their 100-game rolling means crossed repeatedly, and the ladder's last read had them 43 apart. That is why we fired zero of five available submissions on the final day: once placement luck is amortized, resubmitting identical code has expected value zero. We held, and logged the hold as a decision.
+**The closing experiment.** We locked two instances of one build as our final pair and watched 1,000 post-deadline games each (Figure E, right). Their 1,000-game means differ by **5.8**, against a same-build spread of 134 at ~50 games. But convergence buys a *band*, not a point: at matched game counts the two sat 19.8 points apart on average, up to 75.6, their 100-game rolling means crossed repeatedly, and the ladder's last read had them 43 apart. That is why we fired zero of five available submissions on the final day: once placement luck is amortized, resubmitting identical code has expected value zero.
 
 ## 5. The Metagame Is a Dynamical System
 
 Daily replay exports let us compute the archetype composition of the top pool at 15 time points. Two caveats. The exports hold only each day's highest-rated episodes, so every share below describes the **top of the ladder, not the field**. And we classify by **evolution-line set**, not highest-rarity card: automatic labels in a public dump name eight of the top twenty decks after a one-of tech card (Discussion 737107); ours cannot.
 
-**Selection pressure is measurable.** Shares moved as a replicator process predicts: low-win-rate crowd picks were culled, high-win-rate archetypes multiplied. We tracked total-variation distance to the *external* human format's equilibrium: **0.407 → 0.431 (peak) → 0.309 → 0.261** (Figure C), flat early and monotone after the first week.
+**Selection pressure is measurable.** Shares moved as a replicator process predicts: low-win-rate crowd picks were culled, high-win-rate archetypes multiplied. We tracked total-variation distance to the *external* human format's equilibrium: **0.407 → 0.431 (peak) → 0.309 → 0.261** (Figure C), flat in week one, then falling monotonically through the deadline.
 
-**The prediction, then the realization.** Two days before the deadline we wrote down a prediction: the final pool would concentrate further in one rising archetype. Realized: that archetype went **6.3% → 27.5%** by the deadline and **→ 32.9%** five days after; the collapsing crowd pick went **30.9% → 9.5% → 0.7%**, arriving at its external equilibrium of ~0. TV distance reached a new low of 0.254. The forecast rested on the mechanism, not extrapolation, and the post-deadline field confirmed it.
+**The prediction, then the realization.** Two days before the deadline we wrote down a prediction: the final pool would concentrate further in one rising archetype. Realized: that archetype went **6.3% → 27.5%** by the deadline and **→ 32.9%** five days after; the collapsing crowd pick went **30.9% → 9.5% → 0.7%**, arriving at its external equilibrium of ~0. TV distance closed at 0.254, below every pre-deadline reading. The forecast rested on the mechanism, not extrapolation, and the post-deadline field confirmed it.
 
 **Why this drove our decisions.** Re-weighting our measured matchups by the *forecast* field, expected win rate fell from 45–48% to **40.3%**. Our two worst matchups are public: **24.9% (n=197)** and **29.2% (n=24)**. That arithmetic said the ceiling was structural. So we spent the last week on a general-principle repair (S5) and an early lock, not on counter-tech for a field that had not arrived or a deck swap we could not validate.
 
@@ -69,7 +69,7 @@ Daily replay exports let us compute the archetype composition of the top pool at
 
 - **Both seats, always.** Every evaluation runs both seats with repeated games and a fixed minimum sample.
 - **Gates that stopped measuring.** Generic opponents saturated at 85–90% in week one, so we built a distilled-opponent gate that held our search lineage near **52.5%**. By the final lineage it too had saturated (85%); only the incumbent mirror stayed informative at 50%. Figure D shows the saturation; it is why the ladder distribution, not the local gate, became our arbiter.
-- **No initial-state dependence.** The cascade branches on board state only — no opening-specific cases, seat-specific tables, or hard-coded turn numbers. Measured by seat (Figure D): mirror 43.3% vs 56.7% (n=30 each), saturated gates 95% vs 90% (n=40 each); the tilt sits inside the interval.
+- **No initial-state dependence.** The cascade branches on board state — no seat-specific tables or opening scripts; the only turn-indexed rules are the fork's turn-1–2 setup priorities. Measured by seat (Figure D): mirror 43.3% vs 56.7% (n=30 each), saturated gates 95% vs 90% (n=40 each); the tilt sits inside the interval.
 - **Worst cases published.** Both losing matchups are stated with sample sizes and the mechanism that binds them: higher rating means more exposure to the strongest archetype, so the ceiling tightens as you climb.
 - **Consistency at scale.** Two locked instances, same code, independent match streams: 54.0% and 53.0% over their last 1,000 games each (95% CI ±3.1 points).
 
@@ -82,12 +82,12 @@ Our entire first week was a self-built machine-learning stack, and it lost to a 
 - **The comparison that forced the pivot**: the public rule-based fork scored **818.8** on its first submission, beating everything we had built. We pivoted that day.
 - **Three guards** (S2–S4) that passed every local gate and never translated to the ladder.
 - **Three scaling experiments** (3× nodes, wider branching, 8-second budget) all landed inside confidence intervals; one tuned variant was rejected as overfit.
-- **No reinforcement learning — a budget decision, not a verdict.** RL works here for teams that first buy throughput: the strongest public RL entry (Discussion 738158) trained a ~12M-parameter entity transformer by self-play PPO on a custom C++ vectorized engine at ~30 games/s and reached 1132. We ran only the official Python engine. The binding constraint was games per second, not algorithm; torch's absence at inference is a deployment constraint, not evidence against RL. At our throughput, excluding RL was right. At theirs, it was not.
+- **No reinforcement learning — a budget decision, not a verdict.** RL works here for teams that first buy throughput: the strongest public RL entry (Discussion 738158) trained a ~12M-parameter entity transformer by self-play PPO on a custom C++ vectorized engine at ~30 games/s and reached 1132. We ran only the official Python engine. The binding constraint was games per second, not algorithm. At our throughput, excluding RL was right. At theirs, it was not.
 
 ## 8. Conclusion and Code
 
 The most transferable result here is not the agent. It is that on a noisy ladder, **a build is a distribution and a single submission is one sample from it** — and that measuring your own noise floor lets you tell a real improvement from a 130-point illusion. That discipline let us reject three of our own changes, hold on the final day, and predict the field we would have to beat.
 
-Code, the full experiment ledger (78 experiments), and one regeneration command per figure are released under MIT.
+Code, the full experiment ledger (78 experiments), and one regeneration command per figure are MIT-licensed; the repository opens at the hackathon's close.
 
 **Cited participant work.** Rozen, V10 rule-based agent (fork base). Kaggle discussions 737125, 737435, 737107 and 738158, as cited in the text.
