@@ -10,7 +10,7 @@ We treated the ladder itself as the object of study. Every build is a **distribu
 
 Our final agent is not a novel learning system. It is a public rule-based agent — Rozen's V10, credited explicitly — improved by five audited surgeries, of which the evidence let only two ship. The originality we claim is in the method, not the policy code.
 
-Final entry: a matched **pair of the same build**. After 1,000 post-deadline games each they finished **740.2 (53.5%)** and **731.9 (52.9%)**, with 1,000-game means of 723.7 and 717.1. Final placement **1,649 / 6,807** (top 24%).
+Final entry: a matched **pair of the same build**. When the ladder stopped (31 Aug) they stood at **742.8 (54.0%)** and **700.2 (53.0%)** over their last 1,000 games, with 1,000-game means of 725.0 and 719.2. Final placement **1,611 / 6,807** (top 24%).
 
 ---
 
@@ -63,7 +63,7 @@ Three mechanisms, each measured:
 2. **New-submission scheduling priority.** In one window a fresh submission played 32 games while an older one played 1; same-day is not same-sample.
 3. **Drift control.** An identical build resubmitted three days later scored 825.4 against a pre-period mean of 782 (n = 4). Inside the band: rating inflation rejected, not assumed.
 
-**The closing experiment.** We locked two instances of one build as our final pair and watched 1,000 post-deadline games each. Their 1,000-game means differ by **6.6**, against a same-build spread of 134 at ~50 games. But convergence buys a *band*, not a point: at matched game counts the two sat 20.2 points apart on average, up to 75.1, and their 100-game rolling means crossed repeatedly. That is why we fired zero of five available submissions on the final day: once placement luck is amortized, resubmitting identical code has expected value zero. We held, and logged the hold as a decision.
+**The closing experiment.** We locked two instances of one build as our final pair and watched 1,000 post-deadline games each. Their 1,000-game means differ by **5.8**, against a same-build spread of 134 at ~50 games. But convergence buys a *band*, not a point: at matched game counts the two sat 19.8 points apart on average, up to 75.6, their 100-game rolling means crossed repeatedly, and the ladder's last read had them 43 apart. That is why we fired zero of five available submissions on the final day: once placement luck is amortized, resubmitting identical code has expected value zero. We held, and logged the hold as a decision.
 
 ---
 
@@ -87,7 +87,7 @@ Daily replay exports let us compute the archetype composition of the top pool at
 - **Gates that stopped measuring.** Generic opponents saturated at 85–90% in week one, so we built a distilled-opponent gate that held our search lineage near **52.5%**. By the final lineage it too had saturated (85%); only the incumbent mirror stayed informative at 50%. Figure D shows the saturation; it is why the ladder distribution, not the local gate, became our arbiter.
 - **No initial-state dependence.** The cascade branches on board state only — no opening-specific cases, seat-specific tables, or hard-coded turn numbers. Measured by seat (Figure D): mirror 43.3% vs 56.7% (n=30 each), saturated gates 95% vs 90% (n=40 each); the tilt sits inside the interval.
 - **Worst cases published.** Both losing matchups are stated with sample sizes and the mechanism that binds them: higher rating means more exposure to the strongest archetype, so the ceiling tightens as you climb.
-- **Consistency at scale.** Two locked instances, same code, independent match streams: 53.5% and 52.9% over 1,000 games each (95% CI ±3.1 points).
+- **Consistency at scale.** Two locked instances, same code, independent match streams: 54.0% and 53.0% over their last 1,000 games each (95% CI ±3.1 points).
 
 ---
 
@@ -141,3 +141,5 @@ Open for Draft 3: (a) RESOLVED 9/2 — host rulings (Strategy topics 735679/7383
 External review corrections (2026-09-06, Codex blind judge + fact-check, triage in `writeup/review/triage-2026-09-06.md`) — 9 of 9 text fixes applied: §2 "two most-played" → "first- and third-most-played" (Dragapult, 2nd by share, won 58.1%); §3/§7/Figure A "won every local gate" → "passed every local no-regression gate (S2's mirror was a 29–31 tie)"; §5 "two weeks after" → "five days after" (8/21 observation); §4 "at any moment" → "at matched game counts" (script aligns by game index); Figure E rolling window 101 → 100 to match the text; §7 distilled range 484–571 → 327–571 (H-010 hybrid included); §8 "79 rows" → "78 experiments", "script per figure" → "command per figure", "20-point improvement" → "improvement". Figures A and E regenerated. Still open from that review: A4 (final ratings/rank are an 8/31 snapshot; 9/6 read i8 742.8, i9 700.2, rank 1,611 — re-measure 9/10 and date the numbers), plus the judge's additions (card names, S1 definition, top-24% percentile, ±3.1%p CI, seat-split line). wc -w after fixes: 1,997 with captions, 1,908 without.
 
 Judge-driven additions (2026-09-08): §1 "(top 24%)" after placement; §2 card names (Alakazam line, Dunsparce–Dudunsparce engine, Telepath Psychic Energy, Boss's Orders); §3 S1 defined in-line; §4 Kaggle-staff Bradley–Terry / variance remark cited (738791); §6 seat split from Figure D and ±3.1-point CI. The four figure captions moved out of the body into the Media Gallery block above. Body wc -w: 1,969 (captions excluded, separators excluded). Still open: A4 re-measure on 9/10; delete the three empty drafts on the Writeups tab before submitting; re-check SUBMITTED status after submit (bug report 739855).
+
+Final re-measurement (2026-09-10, `watch_rank.py` + `watch_pair.py` + `report_figures.py fetch-ladder`): the ladder's last games for both instances ended 2026-08-31 23:58 UTC and nothing has moved since (9/6 and 9/10 reads identical). Final numbers replace the 8/31 01:00 snapshot: §1 742.8 (54.0%) / 700.2 (53.0%), 1,000-game means 725.0 / 719.2, placement 1,611 / 6,807 (23.7%); §4 mean difference 6.6 → 5.8, same-moment gap 20.2/75.1 → 19.8/75.6, plus the 43-point final-read gap added as further evidence for "a band, not a point"; §6 53.5/52.9 → 54.0/53.0. Figure E regenerated from the refreshed ladder JSONs (window now 8/21–8/31). A4 closed.
