@@ -111,3 +111,12 @@ Writeup의 메타 분석 장(章)에 넣을 뼈대. 근거 데이터·수치는 
 - 갱신 창(8/21 18:36 → 8/31 23:58) 기준 1,000경기 평균 725.0 / 719.2 (차 5.8), 동시점 격차 평균 19.8 / 최대 75.6, 최종 판독 격차 42.6.
 - draft-2 §1·§4·§6 교체, 그림 E 재생성, 본문 1,986단어(제목·이탤릭 헤더 제외, 섹션 제목·마커 포함). 남은 일: 9/11 마커 제거 → 폼 카운터 확인 → 빈 draft 3개 삭제 → Media Gallery 캡션·deck.csv 첨부 → Submit → SUBMITTED 재확인.
 
+
+## 2026-09-10 23:55 KST — Strategy Writeup 제출 완료 (SUBMITTED)
+
+- 제출 URL: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1786172403257 (8/8 생성된 첫 draft를 재사용; slug는 자동 생성값 그대로).
+- 제목 "The Ladder as the Object of Study", 부제 130자, 본문 = `writeup/submission-2026-09-11/body.md` (wc 1,993 / 폼 카운터 1,961). 제출 직후 목록에서 SUBMITTED 확인, 본문 재열람으로 정정 문구 확인.
+- 제출 전 Codex 팩트체크 2차(`review/codex-factcheck-2026-09-10.md`) → 5건 정정 (2-ply 탐색 존재, turn≤2 분기, Boss "only Supporter", TV 단조 구간, MIT 표현).
+- **미완**: Media Gallery 그림 5장, deck.csv 첨부 — 인앱 브라우저에 파일 업로드 도구가 없고 JS 주입 우회는 권한 분류기가 차단. 사용자가 폼에서 직접 업로드하거나 권한 부여 필요. `gallery-captions.md` 순서대로.
+- **빈 draft 2개 삭제 실패**: Kaggle 오류 "Permission 'forumMessages.update' was denied". 제출본과 무관한 IN PROGRESS draft라 심사에 영향 없음(팀당 제출 1개 규정은 SUBMITTED 기준).
+- 폼 안내: 마감(9/14 08:59 KST)까지 retract·edit·resubmit 가능.
