@@ -16,9 +16,14 @@
 5. 미리보기에서 섹션 제목 8개·굵게/기울임 렌더링·그림 순서 확인.
 6. Submit (사용자 승인 필요) → 목록에서 SUBMITTED 상태 확인 + 스크린샷 (버그 739855: 저장만 되고 제출 안 된 사례).
 
-## 상태 (2026-09-10 23:55 KST)
+## 상태 (2026-09-13 update)
 
-- [x] 제목·부제·본문 입력, Save, **Submit → SUBMITTED 확인**
+- [x] 제목·부제·본문 입력, Save, **Submit → SUBMITTED 확인** (9/10 23:55 KST)
+- [x] 본문 9/13 개정 — 737125 삭제 대응, 737107 정정 반영, §8 저장소 URL 삽입 (1,999단어)
+- [x] 저장소 공개: https://github.com/hotorch/ptcg-ai-battle-strategy (MIT, 리플레이 파생물 제거)
+- [ ] **본문 교체** — 9/13 개정본을 폼에 반영 (미반영 상태)
 - [ ] Media Gallery 5장 업로드 (`gallery-captions.md` 순서) — 파일 업로드 필요
 - [ ] `deck.csv` 첨부 (Attachments → Upload Files)
-- [ ] (선택) Writeup URL slug 정리, 빈 draft 2개 삭제(Kaggle 오류로 실패)
+- [ ] Rule 3.6.b 준수 — Simulation 디스커션에 저장소 링크 게시 (사용자 승인 필요)
+
+브라우저 업로드 절차는 **[HANDOFF-upload.md](HANDOFF-upload.md)** 참조.

@@ -88,6 +88,6 @@ Our entire first week was a self-built machine-learning stack, and it lost to a 
 
 The most transferable result here is not the agent. It is that on a noisy ladder, **a build is a distribution and a single submission is one sample from it** — and that measuring your own noise floor lets you tell a real improvement from a 130-point illusion. That discipline let us reject three of our own changes, hold on the final day, and predict the field we would have to beat.
 
-Code, the full experiment ledger (78 experiments), and one regeneration command per figure are MIT-licensed at github.com/hotorch/Kaggle-The-Pok-mon-Company, which opens at the hackathon's close.
+Code, the full experiment ledger (78 experiments), and one regeneration command per figure are MIT-licensed at github.com/hotorch/ptcg-ai-battle-strategy, which opens at the hackathon's close.
 
 **Cited participant work.** Rozen, V10 rule-based agent (fork base). Kaggle discussions 737435, 737107 and 738158, as cited in the text.
