@@ -21,3 +21,18 @@ uv run pytest -q
 - `research_loop/results.tsv`: 실험 결과 원장
 
 대회 데이터는 Competition Use Only이므로 `data/raw/`에만 두며 커밋하지 않습니다.
+
+## Omitted artifacts / 제외된 산출물
+
+이 저장소는 대회 규칙 2.4.b.1(Competition Data 재배포 금지)과 3.6.b(Pokémon Elements 공개 금지)를
+지키기 위해, 리플레이에서 파생한 다음 산출물을 **커밋 히스토리에서 제거**했습니다.
+
+| 경로 | 내용 | 재생성 |
+|---|---|---|
+| `candidates/*/meta_decks.json` | 상위 풀 리플레이에서 채굴한 타 참가자 덱 구성 + 경기 수 | `scripts/mine_episodes.py deck-stats` |
+| `research_loop/deck_*.json` | 개별 참가자 덱 스냅샷 | `scripts/mine_episodes.py extract` |
+| `docs/ptcg/writeup/trace_game.json` | 단일 경기 트레이스 | `scripts/evaluate.py` |
+
+제출본(`main.py` + `deck.csv`)은 이 파일들을 참조하지 않으므로 그대로 실행됩니다. 탐색 계열 후보의
+`_load_meta_decks()`는 파일 부재 시 빈 리스트를 반환하므로 동작하되 상대 덱 사전(prior)만 비활성화됩니다.
+본인의 Competition Data로 위 명령을 실행하면 복원됩니다.

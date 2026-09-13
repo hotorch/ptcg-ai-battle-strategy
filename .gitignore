@@ -13,6 +13,11 @@ data/logs/
 *.jsonl
 *.log
 
+# Replay-derived artifacts (Competition Data). See README "Omitted artifacts".
+meta_decks.json
+research_loop/deck_*.json
+docs/ptcg/writeup/trace_game.json
+
 # Regenerable research artifacts
 context/kaggle/snapshots/
 context/kaggle/topics/
