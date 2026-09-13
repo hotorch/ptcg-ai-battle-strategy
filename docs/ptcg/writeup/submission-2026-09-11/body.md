@@ -16,7 +16,7 @@ We picked the deck by mining daily replay exports for deck signatures and top-po
 
 **What we learned too late.** By the second week the first- and third-most-played archetypes in the top pool were the two *worst*-performing — a crowd-pick paradox. Ours was one of them (13% share, 44% win rate). An independent post-deadline audit of 23,313 games (Discussion 737107) confirms the skew: 11.4% of the field, but only 6.9% of the top decile.
 
-We kept it for a quantitative reason: the policy is tuned to this deck's card IDs, so a swap would have voided every gate result we owned with no budget left to re-earn them. The counter-evidence: one participant (Discussion 737125) gained ~200 points, 652 → 854, from deck arithmetic alone (HP breakpoints via +20 energy and +30 stadium). Our counterfactual cost was not zero. §5 quantifies the ceiling we accepted.
+We kept it for a quantitative reason: the policy is tuned to this deck's card IDs, so a swap would have voided every gate result we owned, with no budget to re-earn them. The counter-evidence: one participant gained ~200 points, 652 → 854, from deck arithmetic alone (HP breakpoints via +20 energy and +30 stadium; source post since removed, figures from our 8/23 log). Our counterfactual cost was not zero. §5 quantifies the ceiling we accepted.
 
 ## 3. How the Agent Decides — and Why Only Two of Five Surgeries Shipped
 
@@ -43,7 +43,7 @@ The engine documents no seed replication, so paired A/B is unavailable. Worse, *
 
 A 60-point "improvement" in one submission is inside the noise. This standard rejected S2–S4.
 
-Others saw this too. Discussion 737125 (8/23) reports a byte-identical tarball submitted seven times: mean 765, sd 51, range 168. Discussion 737435 goes top-down — Bradley-Terry over all public episodes, 500 Monte-Carlo replays of the rating process — and finds wide rank intervals even in the gold zone. Kaggle staff have since said future simulations will re-rate with Bradley–Terry, and that noting this variance in a writeup is welcome (Discussion 738791). Our contribution is what we did with it: we **decomposed the variance into mechanisms**, ran it as a **rejection rule** on our own changes, and **closed it with convergence**.
+Others saw this too. That same post recorded a byte-identical tarball submitted seven times: mean 765, sd 51, range 168. Discussion 737435 goes top-down — Bradley-Terry over all public episodes, 500 Monte-Carlo replays of the rating process — and finds wide rank intervals even in the gold zone. Kaggle staff have since said future simulations will re-rate with Bradley–Terry, and that noting this variance in a writeup is welcome (Discussion 738791). Our contribution is what we did with it: we **decomposed the variance into mechanisms**, ran it as a **rejection rule** on our own changes, and **closed it with convergence**.
 
 Three mechanisms, each measured:
 
@@ -55,15 +55,15 @@ Three mechanisms, each measured:
 
 ## 5. The Metagame Is a Dynamical System
 
-Daily replay exports let us compute the archetype composition of the top pool at 15 time points. Two caveats. The exports hold only each day's highest-rated episodes, so every share below describes the **top of the ladder, not the field**. And we classify by **evolution-line set**, not highest-rarity card: automatic labels in a public dump name eight of the top twenty decks after a one-of tech card (Discussion 737107); ours cannot.
+Daily replay exports let us compute the archetype composition of the top pool at 15 time points. Two caveats. The exports hold only each day's highest-rated episodes, so every share below describes the **top of the ladder, not the field**. And we classify by **evolution-line set**, not highest-rarity card: automatic labels in a public dump named eight of the top twenty decks after a one-of tech card (Discussion 737107, since corrected); ours cannot.
 
 **Selection pressure is measurable.** Shares moved as a replicator process predicts: low-win-rate crowd picks were culled, high-win-rate archetypes multiplied. We tracked total-variation distance to the *external* human format's equilibrium: **0.407 → 0.431 (peak) → 0.309 → 0.261** (Figure C), flat in week one, then falling monotonically through the deadline.
 
 **The prediction, then the realization.** Two days before the deadline we wrote down a prediction: the final pool would concentrate further in one rising archetype. Realized: that archetype went **6.3% → 27.5%** by the deadline and **→ 32.9%** five days after; the collapsing crowd pick went **30.9% → 9.5% → 0.7%**, arriving at its external equilibrium of ~0. TV distance closed at 0.254, below every pre-deadline reading. The forecast rested on the mechanism, not extrapolation, and the post-deadline field confirmed it.
 
-**Why this drove our decisions.** Re-weighting our measured matchups by the *forecast* field, expected win rate fell from 45–48% to **40.3%**. Our two worst matchups are public: **24.9% (n=197)** and **29.2% (n=24)**. That arithmetic said the ceiling was structural. So we spent the last week on a general-principle repair (S5) and an early lock, not on counter-tech for a field that had not arrived or a deck swap we could not validate.
+**Why this drove our decisions.** Re-weighting our measured matchups by the *forecast* field, expected win rate fell from 45–48% to **40.3%**. Our two worst matchups are public: **24.9% (n=197)** and **29.2% (n=24)**. That arithmetic said the ceiling was structural. So we spent the last week on a general-principle repair (S5) and an early lock, not on counter-tech for a field that had not arrived, or a swap we could not validate.
 
-**One honesty note.** Our first read of the late field was wrong — a denominator error inflated one share. We found it ourselves, rewrote and re-validated the aggregator, and every number above is from the corrected pipeline.
+**One honesty note.** Our first read of the late field was wrong — a denominator error inflated one share. We found it ourselves, rewrote and re-validated the aggregator; every number above is from the corrected pipeline.
 
 ## 6. Consistency and Robustness
 
@@ -88,6 +88,6 @@ Our entire first week was a self-built machine-learning stack, and it lost to a 
 
 The most transferable result here is not the agent. It is that on a noisy ladder, **a build is a distribution and a single submission is one sample from it** — and that measuring your own noise floor lets you tell a real improvement from a 130-point illusion. That discipline let us reject three of our own changes, hold on the final day, and predict the field we would have to beat.
 
-Code, the full experiment ledger (78 experiments), and one regeneration command per figure are MIT-licensed; the repository opens at the hackathon's close.
+Code, the full experiment ledger (78 experiments), and one regeneration command per figure are MIT-licensed at github.com/hotorch/Kaggle-The-Pok-mon-Company, which opens at the hackathon's close.
 
-**Cited participant work.** Rozen, V10 rule-based agent (fork base). Kaggle discussions 737125, 737435, 737107 and 738158, as cited in the text.
+**Cited participant work.** Rozen, V10 rule-based agent (fork base). Kaggle discussions 737435, 737107 and 738158, as cited in the text.
