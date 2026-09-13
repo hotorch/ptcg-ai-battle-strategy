@@ -254,9 +254,9 @@ def cmd_deck_field(args: argparse.Namespace) -> None:
     print(f"saved {out}")
 
 
-# limitless TEF-POR all-time 셰어 (8/14 수집, top-agent-observation.md 결과 4).
+# External reference shares, not a demonstrated simulator equilibrium (8/14 snapshot).
 # Grimmsnarl·Slowking은 상위 15위 밖 → 0 처리 (TV도 같은 규약).
-_META_BALANCE = {
+_META_REFERENCE = {
     "Dragapult": 42.7,
     "Grimmsnarl": 0.0,
     "Alakazam": 4.9,
@@ -274,8 +274,17 @@ _META_LINES = [
 ]
 
 
+def _meta_tv(agg: dict[str, int], total: int) -> float:
+    """TV over six named archetypes plus the residual Other category."""
+    observed = [agg.get(name, 0) / total for name in _META_REFERENCE]
+    reference = [share / 100 for share in _META_REFERENCE.values()]
+    observed.append(1.0 - sum(observed))
+    reference.append(1.0 - sum(reference))
+    return 0.5 * sum(abs(p - q) for p, q in zip(observed, reference))
+
+
 def cmd_meta(args: argparse.Namespace) -> None:
-    """그림 C: 상위 풀 아키타입 셰어 시계열 + limitless 균형점(예측→실현).
+    """그림 C: 상위 풀 아키타입 셰어와 외부 기준 분포의 TV 비교.
 
     입력: mine_episodes deck-stats --out 덤프(scratch/decks_YYYY-MM-DD.json).
     분모 = 덱-게임 수(2×에피소드), 집계 규약은 archetype_shares.py와 동일.
@@ -298,36 +307,27 @@ def cmd_meta(args: argparse.Namespace) -> None:
         dates.append(date)
         for name, series in shares.items():
             series.append(100.0 * agg.get(name, 0) / total)
-        tvs.append(
-            0.5 * sum(abs(100.0 * agg.get(n, 0) / total - q) for n, q in _META_BALANCE.items()) / 100.0
-        )
+        tvs.append(_meta_tv(agg, total))
 
     fig, (ax, ax_tv) = plt.subplots(
         2, 1, figsize=(7, 5.2), sharex=True, height_ratios=[3, 1]
     )
     # 균형점 라벨 y 위치: 겹침 방지를 위해 아래에서부터 최소 간격을 강제한다.
     label_y, floor = {}, -3.5
-    for name, eq in sorted(_META_BALANCE.items(), key=lambda kv: kv[1]):
+    for name, eq in sorted(_META_REFERENCE.items(), key=lambda kv: kv[1]):
         label_y[name] = max(eq, floor + 3.2)
         floor = label_y[name]
     for name, color in _META_LINES:
         ys = shares[name]
-        eq = _META_BALANCE[name]
+        eq = _META_REFERENCE[name]
         ax.plot(dates, ys, color=color, linewidth=2, marker="o", markersize=3, label=name)
-        # 예측→실현: 마지막 관측치에서 limitless 균형점으로 향하는 화살표.
-        if abs(eq - ys[-1]) >= 3.0:
-            ax.annotate(
-                "",
-                xy=(dates[-1] + dt.timedelta(days=1.4), eq),
-                xytext=(dates[-1] + dt.timedelta(days=0.3), ys[-1]),
-                arrowprops={"arrowstyle": "->", "color": color, "linewidth": 1.1, "linestyle": ":"},
-            )
+        # Reference markers are not forecasts of the next observation.
         ax.plot(
             [dates[-1] + dt.timedelta(days=1.4), dates[-1] + dt.timedelta(days=2.2)],
             [eq, eq], color=color, linewidth=1.4, linestyle=":",
         )
         ax.annotate(
-            f"eq {eq:.1f}%" if eq else "eq ~0%",
+            f"ref {eq:.1f}%" if eq else "ref 0%*",
             (dates[-1] + dt.timedelta(days=2.4), label_y[name]),
             color=color,
             fontsize=7.5,
@@ -363,24 +363,24 @@ def cmd_meta(args: argparse.Namespace) -> None:
     ax.set_xlim(dates[0] - dt.timedelta(days=0.5), dates[-1] + dt.timedelta(days=5.2))
     ax.set_ylim(-4, 47)
     ax.set_ylabel("share of top-pool deck-games (%)")
-    ax.set_title("Top-pool meta converges toward the external (limitless) equilibrium", fontsize=10)
+    ax.set_title("Archetype shifts; distance to an external reference", fontsize=10)
     ax.legend(frameon=False, fontsize=8, ncol=2, loc="upper left")
     ax.set_xticks(dates)
     ax.set_xticklabels([d.strftime("%m/%d") for d in dates], fontsize=8)
     ax_tv.tick_params(axis="x", labelrotation=45)
 
     ax_tv.plot(dates, tvs, color=TEXT, linewidth=2, marker="o", markersize=3)
-    for i in (0, len(tvs) - 1):
+    for i in (0, dates.index(dt.date(2026, 8, 15)), len(tvs) - 1):
         ax_tv.annotate(
             f"{tvs[i]:.3f}",
             (dates[i], tvs[i]),
             textcoords="offset points",
-            xytext=(0, 7),
+            xytext=(10 if i == 0 else 0, 7),
             color=TEXT_2,
             fontsize=7.5,
-            ha="center",
+            ha="left" if i == 0 else "center",
         )
-    ax_tv.set_ylabel("TV distance\nto equilibrium")
+    ax_tv.set_ylabel("TV distance\n(including Other)")
     ax_tv.set_xlabel("daily top-episodes dataset date (2026)")
     fig.tight_layout()
     out = FIG_DIR / "fig_meta_convergence.png"
@@ -433,17 +433,19 @@ def cmd_cascade(args: argparse.Namespace) -> None:
     arrow(27, 88, 27, 84.5)
     box(4, 77, 46, 7, "lethal window?\nmy prizes ≤ 3 in MAIN, or committed kill-line replay", fs=8)
     badge(50, 84, "S1", _SHIPPED)
-    box(58, 75.5, 38, 8.5, "h019 lethal machine\ncrystallized-turn search; kill committed\nonly after 2-of-2 fresh re-verification", fs=8)
+    box(58, 75.5, 38, 8.5, "S1: turn search over sampled hidden states\ncommit with two supporting samples;\nextra verification if initial votes < 2", fs=8)
     arrow(50, 80.5, 58, 80)
     ax.text(54, 82, "yes", fontsize=7.5, color=TEXT_2)
     arrow(27, 77, 27, 73.5)
     ax.text(29, 74.8, "no", fontsize=7.5, color=TEXT_2)
 
-    box(4, 66, 46, 7, "Rozen V10 fork — score every legal option,\nplay the max (memetic-tuned weights)", fs=8.5)
+    arrow(70, 75.5, 48, 73)
+    ax.text(58, 72.5, "no line / failure: fallback", fontsize=6.7, color=TEXT_2)
+    box(4, 66, 46, 7, "Rozen V10 fork: heuristic action ranking\n+ 2-ply determinized search may override", fs=8.2)
     arrow(27, 66, 27, 63.5)
 
     tiers = [
-        ("draw abilities (Dudunsparce / Fezandipiti)", "30k–38k", [("S2", _REJECTED), ("S4", _REJECTED)]),
+        ("draw abilities (Dudunsparce; fork alternatives)", "30k–38k", [("S2", _REJECTED), ("S4", _REJECTED)]),
         ("bench Pokémon", "~20k", []),
         ("stadium counters", "18.5k–19.5k", []),
         ("setup items (Poffin / Poke Pad / Rare Candy)", "12k–18k", []),
@@ -463,15 +465,15 @@ def cmd_cascade(args: argparse.Namespace) -> None:
         "", xy=(5.2, 21), xytext=(5.2, 62),
         arrowprops={"arrowstyle": "->", "color": TEXT_2, "linewidth": 1.0}, zorder=1,
     )
-    ax.text(3.4, 41, "priority", rotation=90, va="center", fontsize=7.5, color=TEXT_2)
+    ax.text(3.4, 41, "heuristic priority", rotation=90, va="center", fontsize=7.5, color=TEXT_2)
 
-    box(4, 8, 46, 5.5, "deck.csv — Alakazam list (fixed all run)", fs=8.5)
+    box(4, 8, 46, 5.5, "deck.csv — final Alakazam list (60 cards)", fs=8.5)
     badge(50, 10.8, "S3", _REJECTED)
 
     # -- 오른쪽: 수술 범례 --
     entries = [
-        ("S1", _SHIPPED, "H-024b light lethal graft", "raw-dict gate delegates instantly outside the\nlethal window (kills the 150–390 ms overhead)"),
-        ("S5", _SHIPPED, "H-036 tempo boss", "Boss's Orders 2262 → 6000 when the gust-kill\nis certain this turn (beats draw supporters)"),
+        ("S1", _SHIPPED, "H-024b light lethal graft", "raw-dict gate skips heavy wrapper work\noutside the lethal window; fork still searches"),
+        ("S5", _SHIPPED, "H-036 tempo boss", "Boss's Orders 2262 → 6000 when the gust-kill\npasses the same-turn KO guards"),
         ("S2", _REJECTED, "H-030 deck-out guard", "ban ACTIVATE draw prompts of all four\n3-card draw abilities when deck margin < 3"),
         ("S4", _REJECTED, "H-035 stall guard", "stall_lock (turn ≥ 8, opp. 0 prizes, deck ≤ 18)\nfreezes every draw channel, draws only"),
         ("S3", _REJECTED, "H-034 mirror list", "swap deck.csv to the reconstructed\nmirror-winner list (policy already supports it)"),
@@ -486,7 +488,7 @@ def cmd_cascade(args: argparse.Namespace) -> None:
     ax.add_patch(plt.Circle((60, 8.2), 1.6, facecolor=_SHIPPED, edgecolor="none"))
     ax.text(62.5, 8.2, "in the final build (h036 = fork + S1 + S5)", fontsize=7.5, va="center")
     ax.add_patch(plt.Circle((60, 4.8), 1.6, facecolor=_REJECTED, edgecolor="none"))
-    ax.text(62.5, 4.8, "passed every local gate, did not translate to ladder", fontsize=7.5, va="center")
+    ax.text(62.5, 4.8, "tested on ladder; excluded from final build", fontsize=7.5, va="center")
 
     fig.tight_layout()
     out = FIG_DIR / "fig_cascade_surgeries.png"
@@ -495,7 +497,6 @@ def cmd_cascade(args: argparse.Namespace) -> None:
 
 
 RATING_HISTORY = ROOT / "submissions" / "rating_history.tsv"
-PAIR_CONVERGENCE = ROOT / "submissions" / "pair_convergence.tsv"
 BUILD_RE = re.compile(r"^(?:\d{8}-)?(H-?[A-Za-z0-9]+?)(?:-\d+)?\s*[:—-]")
 
 
@@ -537,7 +538,7 @@ def cmd_dist(args: argparse.Namespace) -> None:
         vals = families[key]
         # 결정론적 지터(재현성 보장 — Math.random 불가 원칙과 동일 취지)
         jitter = [((rng_state * (j + 7) * (i + 3)) % 41 - 20) / 190.0 for j in range(len(vals))]
-        big = len(vals) >= 5
+        big = key in ("H024B", "H036")
         ax.scatter(
             [i + dx for dx in jitter],
             vals,
@@ -570,28 +571,12 @@ def cmd_dist(args: argparse.Namespace) -> None:
                     color=TEXT_2,
                 )
 
-    # 마감 후 수렴 페어를 별도 마커로 겹쳐 그린다.
-    pair = _final_pair()
-    if pair and "H036" in keys:
-        x = keys.index("H036")
-        ax.scatter(
-            [x, x],
-            pair,
-            marker="*",
-            s=210,
-            color=SERIES[2],
-            zorder=6,
-            linewidths=0,
-            label=f"final pair after 1,000 games each (gap {abs(pair[0] - pair[1]):.1f})",
-        )
-        ax.legend(frameon=False, loc="lower right", fontsize=9)
-
     ax.set_xticks(range(len(keys)))
     ax.set_xticklabels(keys, rotation=60, ha="right", fontsize=8)
-    ax.set_ylabel("final ladder rating")
-    ax.set_xlabel(f"build (chronological) — {total} submissions across {len(keys)} builds")
+    ax.set_ylabel("last recorded rating per submission")
+    ax.set_xlabel(f"experiment family — {total} submissions across {len(keys)} families")
     ax.set_title(
-        "Every build is a distribution: identical code, repeated submissions",
+        "Repeated submissions: H024B and H036 highlight identical-build spread",
         fontsize=11,
         loc="left",
         pad=14,
@@ -703,7 +688,7 @@ def cmd_convergence(args: argparse.Namespace) -> None:
             fontsize=8,
             color=TEXT_2,
         )
-    ax_l.set_title("Placement luck is amortized, not banked", fontsize=10, loc="left")
+    ax_l.set_title("One placement spike decayed", fontsize=10, loc="left")
     ax_l.set_xlabel("ladder game #")
     ax_l.set_ylabel("rating")
 
@@ -736,7 +721,7 @@ def cmd_convergence(args: argparse.Namespace) -> None:
         mean_gap = abs(sum(series[0]) / len(series[0]) - sum(series[1]) / len(series[1]))
         ax_r.annotate(
             f"difference in 1,000-game means: {mean_gap:.1f}\n"
-            f"same-moment gap: mean {sum(gaps) / n:.1f}, max {max(gaps):.1f}",
+            f"gap at matched game counts: mean {sum(gaps) / n:.1f}, max {max(gaps):.1f}",
             (0.985, 0.06),
             xycoords="axes fraction",
             ha="right",
@@ -746,7 +731,7 @@ def cmd_convergence(args: argparse.Namespace) -> None:
         )
 
     ax_r.set_title(
-        "…but 1,000 games buys a band, not a point estimate",
+        "Two final instances: similar averages, fluctuating ratings",
         fontsize=10,
         loc="left",
     )
@@ -757,18 +742,6 @@ def cmd_convergence(args: argparse.Namespace) -> None:
     out = FIG_DIR / "fig_convergence.png"
     fig.savefig(out, dpi=200)
     print(f"saved {out}")
-
-
-def _final_pair() -> list[float]:
-    """pair_convergence.tsv의 마지막 스냅샷에서 i8/i9 최종 레이팅을 읽는다."""
-    if not PAIR_CONVERGENCE.exists():
-        return []
-    lines = [ln.strip().split("\t") for ln in PAIR_CONVERGENCE.read_text(encoding="utf-8").splitlines() if ln.strip()]
-    body = [ln for ln in lines if len(ln) > 3 and ln[0][:1].isdigit()]
-    if len(body) < 2:
-        return []
-    stamp = body[-1][0]
-    return [float(ln[3]) for ln in body if ln[0] == stamp]
 
 
 def main() -> None:

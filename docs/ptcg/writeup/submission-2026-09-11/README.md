@@ -1,29 +1,45 @@
-# 9/11 제출 패키지 — Strategy Writeup
+# Strategy Writeup — 업로드 준비본 (2026-09-13 수정)
 
-원본: `../draft-2.md` (2026-09-10 재측정 반영본, 커밋 3735d98 기준). 이 폴더는 폼에 붙여넣을 최종 형태.
+**실행 절차는 [HANDOFF-upload.md](HANDOFF-upload.md) 하나를 따른다. 기존 제출을 Edit한다.**
 
-- `body.md` — 본문 §1–§8 (제출본과 동일, Codex 2차 정정 반영). **1,993단어**(wc), 폼 카운터 1,961.
-- `gallery-captions.md` — Media Gallery 5장 업로드 순서와 캡션.
-- `gallery/` — 그림 A–E PNG (9/10 재생성본 포함).
-- `deck.csv` — 첨부용 덱리스트.
+- `body.md`: 8개 섹션의 수정 본문. TV와 모집단 귀속 정정, 덱 운용 설명 보강.
+- `gallery/`: 본문 첫 등장 순서 **A → B → E → C → D**, 총 5장.
+- `gallery-captions.md`: 캡션 전문과 표본·출처·비교 한계.
+- `deck.csv`: 실제 최종 H036 덱, ID 60줄. **루트 덱과 다르므로 반드시 이 파일 사용.**
+- `deck-reference__v01__named-counts.csv`: 같은 60장의 카드명·수량·역할. Kaggle 첨부용이며 Git에서 제외했다.
 
-## 제출 절차 (마감 2026-09-13 23:59 UTC = 9/14 08:59 KST)
+제목 유지: **The Ladder as the Object of Study**.
+마감 기록: 2026-09-13 23:59 UTC (= 9/14 08:59 KST). 실제 업로드 시 UI 마감도 확인한다.
 
-1. Writeups 탭에서 빈 "New Writeup" draft 3개 삭제 (사용자).
-2. 새 Writeup: 제목 `The Ladder as the Object of Study`, 본문에 `body.md` 붙여넣기 → 폼 카운터 ≤ 2,000 확인 (예상 1,988).
-3. Media Gallery: `gallery-captions.md` 순서대로 5장 업로드, 캡션 입력.
-4. 첨부: `deck.csv`.
-5. 미리보기에서 섹션 제목 8개·굵게/기울임 렌더링·그림 순서 확인.
-6. Submit (사용자 승인 필요) → 목록에서 SUBMITTED 상태 확인 + 스크린샷 (버그 739855: 저장만 되고 제출 안 된 사례).
+현재 상태: **2026-09-13 Kaggle 수정본 Update Submission 완료, Submitted! 확인.**
+본문 UI 1,853 words, 그림 5장 A→B→E→C→D, 덱 파일 2개와 캡션 전문 첨부.
+Kaggle 이미지 제목은 저장 시 255자 제한이 있어 짧은 설명을 사용하고 `gallery-captions.md`를 별도 첨부했다.
 
-## 상태 (2026-09-13 update)
+## 수정한 핵심
 
-- [x] 제목·부제·본문 입력, Save, **Submit → SUBMITTED 확인** (9/10 23:55 KST)
-- [x] 본문 9/13 개정 — 737125 삭제 대응, 737107 정정 반영, §8 저장소 URL 삽입 (1,999단어)
-- [x] 저장소 공개: https://github.com/hotorch/ptcg-ai-battle-strategy (MIT, 리플레이 파생물 제거)
-- [ ] **본문 교체** — 9/13 개정본을 폼에 반영 (미반영 상태)
-- [ ] Media Gallery 5장 업로드 (`gallery-captions.md` 순서) — 파일 업로드 필요
-- [ ] `deck.csv` 첨부 (Attachments → Upload Files)
-- [ ] Rule 3.6.b 준수 — Simulation 디스커션에 저장소 링크 게시 (사용자 승인 필요)
+- TV에 Other 포함: 8/04 0.426, 8/15 0.370, 8/21 0.393. 전체 분포가 계속 수렴한다는 결론 철회.
+- 24.9%·29.2%는 상위 풀의 여러 Alakazam 파일럿 성적임을 명시. 불명확한 40.3% 추정 삭제.
+- A: 실제 탐색·fallback·표본 재검증 로직. B: 오래된 8.3 별표 제거, 실험 계열/동일 빌드 구분. E: 경기 순번 비교로 정정.
+- 본문: 덱 수량·역할과 140HP 예시, 관측된 동작 변화와 승률 향상 입증을 구분.
 
-브라우저 업로드 절차는 **[HANDOFF-upload.md](HANDOFF-upload.md)** 참조.
+## 재생성 (프로젝트 루트에서)
+
+```bash
+uv run python tests/test_report_figures.py
+uv run python scripts/report_figures.py cascade
+uv run python scripts/report_figures.py dist
+uv run python scripts/report_figures.py meta
+uv run python scripts/report_figures.py convergence
+uv run python scripts/report_figures.py matrix --runs research_loop/runs/20260813T225422Z__20260814-H036-02.json research_loop/runs/20260813T225501Z__20260814-H036-01.json
+```
+
+원본 입력은 기존 로컬 Competition Data다. GitHub에는 넣지 않는다.
+생성 결과는 `docs/ptcg/figures/`에 쓰인다. 재생성 후 아래 대응으로 gallery에도 복사해야 한다.
+
+| 생성 파일 | 업로드 파일 |
+|---|---|
+| fig_cascade_surgeries.png | A_cascade_surgeries.png |
+| fig_build_distribution.png | B_build_distribution.png |
+| fig_convergence.png | E_convergence.png |
+| fig_meta_convergence.png | C_meta_convergence.png |
+| fig_seat_matrix.png | D_seat_matrix.png |

@@ -32,3 +32,6 @@ submissions/packages/
 .DS_Store
 
 scratch/
+
+# Named card metadata for Kaggle-only writeup attachment
+/docs/ptcg/writeup/submission-2026-09-11/deck-reference__v01__named-counts.csv

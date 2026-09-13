@@ -1,122 +1,118 @@
-# 핸드오프 — Writeup 미디어 업로드 + 포럼 링크 게시
+> 2026-09-13 실행 기록: 수정본 Update Submission 후 Submitted! 확인. 이미지 제목은 255자 제한이므로 짧은 설명을 쓰고 gallery-captions.md 전문을 첨부했다. 아래는 실행 전 절차 기록이다.
 
-**작성 2026-09-13 03:4x UTC. 마감 2026-09-13 23:59 UTC (= 9/14 08:59 KST).**
+# 핸드오프 — 수정본 업로드 (2026-09-13 재검토 반영)
 
-브라우저 자동화가 필요한 작업만 남았다. Claude Code 세션에서는 Chrome 확장이 연결되지 않아
-파일 업로드 도구에 접근할 수 없었다. 이 문서만 읽고 독립적으로 수행할 수 있게 작성했다.
+기존 초안을 그대로 올리지 않는다. 이 폴더의 **수정된 본문과 그림·캡션**을 사용한다.
+마감 기록: **2026-09-13 23:59 UTC (= 9/14 08:59 KST)**. 업로드 시작 시 Kaggle UI 마감도 확인한다.
+현재 요청은 수정본 준비까지였으므로 Kaggle/GitHub 업로드와 공개 게시를 실행하지 않았다.
 
----
+## 0. 대상과 파일
 
-## 0. 전제 — 이미 끝난 것 (다시 하지 말 것)
-
-- Writeup 본문은 **2026-09-10 23:55 KST에 이미 SUBMITTED 상태**다. 새로 만들지 말고 **기존 것을 Edit**한다.
-  - URL: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1786172403257
-  - 제목: `The Ladder as the Object of Study` (변경 금지)
-- 계정: Kaggle 사용자 `aisamhottman`.
-- 저장소는 공개 완료: https://github.com/hotorch/ptcg-ai-battle-strategy (MIT).
-- 구 저장소 `hotorch/Kaggle-The-Pok-mon-Company`는 **비공개 유지**. 절대 공개하지 말 것
-  (force-push 이전 커밋에 대회 데이터 파생 파일이 남아 있음).
+- 계정: `aisamhottman`.
+- **기존 Writeup을 Edit**: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1786172403257
+- 제목 **The Ladder as the Object of Study** 유지. 기존 subtitle·Track 확인/유지.
+- 9/10 SUBMITTED 기록이 있다. 새 Writeup을 만들지 않는다.
+- 파일 기준 폴더: `docs/ptcg/writeup/submission-2026-09-11/`.
+- 본문 `body.md`: 로컬 공백 구분 **1878 words**, 8개 섹션. 최종 폼 카운터 ≤2,000 재확인.
+- 덱은 **이 폴더의 deck.csv**. 루트 deck.csv는 다른 덱이다. 최종 에이전트는 `candidates/h036_tempo_boss/`.
+- 빈 New Writeup draft 2개는 이번 작업에서 건드리지 않는다.
+- 공개 저장소: https://github.com/hotorch/ptcg-ai-battle-strategy (9/13 PUBLIC 확인).
+- 구 저장소 `hotorch/Kaggle-The-Pok-mon-Company`는 비공개 유지. 과거 Competition Data가 있으므로 공개하지 않는다.
 
 ## 1. 본문 교체
 
-`docs/ptcg/writeup/submission-2026-09-11/body.md`가 최종본이다. **1,999 words (wc -w)**,
-Kaggle 폼 카운터 기준 예상 ~1,967.
+Edit → Project Description 전체를 `body.md`로 교체한다. Preview에서 8개 섹션·코드 예시·링크 렌더링을 확인한다.
 
-9/10 제출본 대비 달라진 점 — 반드시 반영해야 한다:
+수정 확인용: §5에 **0.426 / 0.370 / 0.393**, `and Other`, `not our final agent`가 있어야 한다.
+이전 수치 0.407→0.261→0.254와 40.3% 기대승률은 사용하지 않는다.
 
-1. **Discussion 737125가 삭제됨**(`[Deleted Topic]`). 이를 인용하던 2개 문장을 자체 기록 출처로
-   재귀속했고 참고문헌 목록에서 뺐다. 수치는 그대로다.
-2. Discussion 737107은 원저자가 8/24에 덱 라벨을 수정 → `(Discussion 737107, since corrected)`.
-3. §8에 저장소 URL을 넣었다: `github.com/hotorch/ptcg-ai-battle-strategy`.
-4. 위 증가분 상쇄로 3개 문장을 압축했다.
+## 2. Media Gallery
 
-**절차**: Edit → Project Description 전체 선택(⌘A) 후 `body.md` 전문으로 교체 →
-하단 "N Words" 카운터가 **2,000 이하**인지 확인.
+기존 이미지가 있으면 이전 것을 제거/교체하여 중복 없이 **5장**, 순서 **A → B → E → C → D**로 만든다.
+아래 각 문단 전문이 캡션이다. 그림 파일은 `gallery/` 안에 있다.
 
-## 2. Media Gallery — 그림 5장
+## 1. A_cascade_surgeries.png
 
-파일은 `docs/ptcg/writeup/submission-2026-09-11/gallery/`에 있다. 총 940KB.
-**업로드 순서 = 본문 첫 언급 순서. 아래 순서를 지킬 것 (A → B → E → C → D).**
+Figure A — The final decision pipeline and five tested changes. S1 and S5 are retained; S2–S4 were tested locally and on the ladder, then excluded from the final build. The fork's heuristic priorities are conditional and may be overridden by its 2-ply search; the diagram includes fork-supported alternatives that are absent from the final deck. S1 uses sampled hidden states, not guaranteed information. Source: candidates/h036_tempo_boss/main.py and fork_policy.py; policy base: Rozen's V10 (https://www.kaggle.com/code/romanrozen/strong-start-baseline-agent-v10-lb-950).
 
-| # | 파일 | 캡션 (그대로 입력) |
-|---|---|---|
-| 1 | `A_cascade_surgeries.png` | Figure A — the priority cascade with the five surgery sites: two shipped (S1, S5), three passed locally and did not translate (S2–S4). |
-| 2 | `B_build_distribution.png` | Figure B — one point per submission, grouped by build. |
-| 3 | `E_convergence.png` | Figure E — left: the placement spike and decay; right: the final pair's 1,000-game trajectories. |
-| 4 | `C_meta_convergence.png` | Figure C — top-pool archetype shares at 15 dates vs the external equilibrium; throttled-matchmaking window shaded; lower panel, TV distance. |
-| 5 | `D_seat_matrix.png` | Figure D — final-build win rate per gate and seat, with sample sizes; two of three gates sit at the ceiling. |
+## 2. B_build_distribution.png
 
-주의:
-- 캡션·그림 내 텍스트는 **단어 수에 포함되지 않는다** (호스트 답변 735679, 738657).
-- 5장 모두 자체 제작 차트다. 카드 아트워크·보드 스크린샷이 없으므로 Pokémon Elements 위반 소지 없음.
-  (호스트 9/12 답변 736603: 보드 상태를 그릴 거면 자체 제작 말고 공식 비주얼라이저를 쓰라 — 우리는 해당 없음.)
+Figure B — One point per submission, grouped by experiment-family label; orange bars mark family means. Blue highlights identify the repeated identical-build comparisons H024B (n=7, range 133.7) and H036 (n=9, range 80.9). Other families can contain variants. Each value is the last rating recorded for that submission, at differing dates and game counts; ranges are descriptive, not confidence intervals. Source: submissions/rating_history.tsv. The final pair's longer trajectories are shown separately in Figure E.
 
-## 3. 첨부 — deck.csv
+## 3. E_convergence.png
 
-Attachments → Upload Files → `docs/ptcg/writeup/submission-2026-09-11/deck.csv` (246바이트, 60장).
+Figure E — Left: one placement spike, submission 55515319. Right: the final H036 pair, submissions 55525772 and 55525773, through their last 1,000 recorded games ending 31 August. Thin lines show per-game ratings; thick lines show trailing means over up to 100 games. Mean ratings are 725.0 and 719.2 (difference 5.8); terminal ratings differ by 42.7. The 19.8 average and 75.6 maximum gaps align game counts, not timestamps. Source: Kaggle episode histories; these are two observed trajectories, not a controlled convergence experiment.
 
-호스트가 명시 허용한 방식이다 (738657, 9/1 Addison Howard):
-> "attaching as a csv file/Kaggle dataset to your Writeup is sufficient and wouldn't count against your
-> word limit. That would not be considered circumnavigating the limit."
+## 4. C_meta_convergence.png
 
-## 4. 제출 및 검증 — 여기서 실수가 나온다
+Figure C — Shares of exported top-pool deck-games at 15 dates, not shares of the whole ladder. The lower panel uses TV = one half the sum of absolute share differences across six named archetypes plus Other. The external reference is the Limitless TEF–POR snapshot recorded on 14 August; asterisks mark Grimmsnarl and Slowking, approximated as zero because they were outside the reference's top 15. These assumptions limit interpretation. TV is 0.426 on 8/04, 0.370 on 8/15 and 0.393 on 8/21: the final observation does not establish continued convergence. The shaded interval marks reported matchmaking throttling. Sources: Daily Top Episodes (https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709160), our dated observation log, and the motivating discussion (https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735123).
 
-1. Preview로 섹션 제목 8개, 굵게/기울임, 그림 5장 순서를 확인.
-2. **Submit(또는 Update) 버튼까지 누른다.** 저장만 된 draft는 심사에서 제외된다.
-3. 목록으로 돌아가 **SUBMITTED 배지를 눈으로 재확인**하고 스크린샷을 남긴다.
-   - 알려진 버그 739855: 제출본이 정체불명 draft로 덮이는 사례가 보고됨.
-4. 본문을 다시 열어 §8의 저장소 URL과 737125 관련 문장이 반영됐는지 확인.
+## 5. D_seat_matrix.png
 
-참고: 계정 Writeups 탭에 빈 `New Writeup` draft 2개가 남아 있다. 9/10에 삭제를 시도했으나
-Kaggle이 `Permission 'forumMessages.update' was denied` 오류를 냈다. **제출본과 무관하므로
-심사에 영향 없다** (팀당 1개 규정은 SUBMITTED 기준). 시간이 남으면 정리하되 실패해도 무시할 것.
+Figure D — H036 win rates by local opponent and seat: incumbent H024B, a replay-distilled opponent, and a rule-based counter-archetype proxy. The labels give sample sizes. The proxy's 100% results and the distilled gate's 85% aggregate offer limited discrimination; they do not establish performance against strong ladder pilots. The incumbent comparison is 30/60 overall, with a roughly 38–62% Wilson interval. Source: recorded runs 20260814-H036-01 and 20260814-H036-02. No opening-hand stratification was performed.
 
-## 5. 포럼에 저장소 링크 게시 — 규정 준수용 (중요)
+## 3. 덱 첨부
 
-대회 Rule 3.6.b:
-> "If you do choose to share Competition Code or other such code, **you are required to share it on
-> Kaggle.com on the discussion forum or notebooks associated specifically with the Competition for the
-> benefit of all competitors.**"
+Attachments에 아래 두 파일을 추가한다:
 
-GitHub에만 공개하면 문자 그대로는 비준수다. Simulation 트랙 디스커션에 새 글로 링크를 남겨야 한다.
-선례: Discussion 735444 (rin ichikawa, 8/16)가 레포를 포럼에 공유했고 유지되고 있다.
+1. `deck.csv`: H036 최종 제출과 동일한 60장 카드 ID.
+2. `deck-reference__v01__named-counts.csv`: 같은 60장, 카드명·수량·역할 21행의 열람용 표.
 
-게시 위치: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion → New Topic
+카드명 표는 Kaggle 첨부용이다. GitHub에 추가하지 않는다. `.gitignore`에 등록되어 있다.
+호스트 738657은 덱 CSV 첨부와 단어 수 제외를 허용했다. 735679는 Media Gallery의 단어 수 제외를 확인했다.
 
-**제목**: `[MIT] Solution repo: treating the ladder as a distribution (1,611th, 742.8)`
+## 4. Submit 및 검증
 
-**본문 초안**:
+- Preview: 제목, 8개 섹션, 140HP 예시, 그림 5장과 캡션, 덱 2개, 링크 확인.
+- **Submit 또는 Update까지 누른다. Save만 하면 안 된다.**
+- 목록에서 **SUBMITTED 배지**를 확인하고 스크린샷을 남긴다.
+- 다시 열어 수정된 §5와 그림 B(8.3 별표 없음), C(TV including Other), E(matched game counts)를 확인한다.
+- 자동화 결과에 제출 상태, 폼 단어 수, 첨부 개수, 스크린샷 경로를 남긴다.
 
-```
-Sharing our repository under MIT, per the code-sharing rule.
+## 5. 공개 분석 코드 동기화
 
-  https://github.com/hotorch/ptcg-ai-battle-strategy
+수정된 `scripts/report_figures.py`와 `tests/test_report_figures.py`는 현재 로컬에만 있다.
+업로드 작업을 승인받아 실행하는 세션에서 공개 저장소의 분석 코드도 이 수정본으로 동기화해야 한다.
+현재 origin은 공개 저장소지만 push 전 다시 확인한다. 새 커밋을 만들고 amend/force-push는 하지 않는다.
 
-Our final agent is a fork of Rozen's public V10 rule-based agent with two shipped changes; the
-repository is mostly the measurement apparatus around it:
+동기화 대상은 이번 수정의 코드·본문·캡션·그림·문서와 `.gitignore`다. **무차별 git add . 대신 diff를 검토하여 지정한다.**
+카드 메타데이터 CSV, raw/replay 데이터, context 캐시, 실험 run JSON은 추가하지 않는다.
+`tests/test_report_figures.py` 통과와 공개 코드의 Other 항 포함을 확인한다.
+Writeup 마감이 임박하면 우선 1–4를 완료해 제출 상태를 확보한다.
 
-- research_loop/results.tsv — the full ledger of 78 experiments
-- scripts/evaluate.py — both-seat repeated-match evaluation
-- scripts/mine_episodes.py — deck-signature and win-rate aggregation from daily episode exports
-- scripts/report_figures.py — one regeneration command per figure
+## 6. Rule 3.6.b 공유 글 — 공개 게시 승인 후
 
-The thing we found most useful: the same build resubmitted seven times spanned 134 rating points,
-so we treated every build as a distribution rather than a point, and used that as a rejection rule
-on our own changes. Three of five changes we wrote never shipped because of it.
+규칙은 코드 공개 시 해당 대회 포럼 또는 노트북에서도 공유하도록 한다.
+이 단계의 공개 게시 승인이 아직 없으면 아래 완성된 초안에 대해 사용자 승인을 받은 뒤 게시한다.
+이미 동일한 공유 글이 있으면 중복 생성하지 않는다.
+위치: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion
 
-Note on contents: artifacts derived from replay exports (mined decklists, game traces) are omitted
-from the repository under the Competition Data terms; README lists them and the command that
-regenerates each from your own data.
+**제목**: `[MIT] Solution and evaluation code: The Ladder as the Object of Study`
 
-Happy to answer questions about the measurement setup.
+**본문**:
+
+```text
+Sharing our solution and evaluation code under MIT:
+https://github.com/hotorch/ptcg-ai-battle-strategy
+
+The final agent is in candidates/h036_tempo_boss/ (the repository-root deck is a different research baseline). It builds on Rozen's public V10 policy, with our selective lethal-search wrapper and a guarded Boss's Orders priority.
+
+The repository includes the ledger of 78 experiments, both-seat evaluation scripts, and figure-generation code. Seven submissions of one identical build spanned 133.7 rating points. We treated that as a reason to require more evidence from individual submission improvements, not as a significance threshold.
+
+Of five tested changes, two remained in the final build. The others were tested on the ladder and excluded. Our final pair finished at 742.8 and 700.2; the S5 match tests did not establish an overall win-rate gain.
+
+The final review also corrected the metagame chart: total-variation distance now includes Other. The data support a directional Dragapult forecast, but not continued convergence to an external equilibrium.
+
+Replay-derived inputs and the named-card attachment are omitted from the public repository. The README describes omitted inputs and regeneration steps using participants' own competition data. Pokémon Elements are not licensed as our own work.
+
+Policy base: https://www.kaggle.com/code/romanrozen/strong-start-baseline-agent-v10-lb-950
 ```
 
-게시 전 사용자 승인을 받을 것. 공개 게시이므로 임의로 올리지 말 것.
+## 완료 체크리스트
 
-## 6. 완료 체크리스트
-
-- [ ] 본문을 `body.md` 최신본으로 교체, 폼 카운터 ≤ 2,000 확인
-- [ ] 그림 5장 업로드 (A → B → E → C → D), 캡션 5개 입력
-- [ ] `deck.csv` 첨부
-- [ ] Submit → SUBMITTED 재확인 + 스크린샷
-- [ ] (사용자 승인 후) Simulation 디스커션에 저장소 링크 게시
+- [ ] 기존 Writeup 본문 교체, 폼 단어 수 ≤2,000
+- [ ] 그림 5장 A→B→E→C→D, 새 캡션 5개
+- [ ] H036 deck.csv + 이름·수량 표 첨부
+- [ ] Submit/Update → SUBMITTED 재확인 + 스크린샷
+- [ ] 공개 분석 코드 수정본 동기화 확인
+- [ ] 승인 후 포럼 공유 글 게시, 게시 URL 기록
