@@ -43,3 +43,10 @@ uv run python scripts/report_figures.py matrix --runs research_loop/runs/2026081
 | fig_convergence.png | E_convergence.png |
 | fig_meta_convergence.png | C_meta_convergence.png |
 | fig_seat_matrix.png | D_seat_matrix.png |
+
+## 공개 완료 (2026-09-13)
+
+- 수정 코드 push: `e70b44e`, public `hotorch/ptcg-ai-battle-strategy` main.
+- [제출된 Writeup](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1786172403257): Submitted! 확인.
+- [솔루션 공유 포럼](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741120): 공개 게시 확인.
+- 실제 갤러리 짧은 제목: `gallery-titles__v01__kaggle.txt`. 캡션 전문은 별도 첨부.

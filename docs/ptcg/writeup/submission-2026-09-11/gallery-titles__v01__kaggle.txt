@@ -1,0 +1,9 @@
+Figure A — Final pipeline and five tested changes. S1 and S5 retained; S2–S4 excluded. S1 samples hidden states; heuristic priorities can be overridden by 2-ply search. Full caption and sources: gallery-captions.md.
+
+Figure B — Ratings by experiment family. Blue: identical-build repeats H024B (n=7, range 133.7) and H036 (n=9, range 80.9). Other families may contain variants; ranges are descriptive. Full caption and source: gallery-captions.md.
+
+Figure E — Placement spike and final H036 pair. Last-1,000-game means: 725.0 and 719.2. Gaps align game counts, not timestamps; two trajectories do not prove convergence. Full caption and sources: gallery-captions.md.
+
+Figure C — Exported top-pool shares, not the whole ladder. TV includes Other: 0.426, 0.370, 0.393 on 8/04, 8/15, 8/21. Continued convergence is not established. Full assumptions and sources: gallery-captions.md.
+
+Figure D — H036 by local opponent and seat. Incumbent: 30/60 overall (Wilson interval about 38–62%). Saturated proxy gates do not establish strength against top pilots. Full caption and run sources: gallery-captions.md.
