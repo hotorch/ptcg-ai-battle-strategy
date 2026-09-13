@@ -1,6 +1,34 @@
 # PTCG AI Battle Research
 
-Kaggle의 [PTCG AI Battle Challenge Simulation](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle)용 재현 가능한 연구 작업공간입니다.
+English | [한국어](README.ko.md)
+
+Reproducible research workspace for the [Kaggle Pokémon Trading Card Game AI Battle Challenge](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle). The project studies how a rule-based agent behaves on a noisy ladder, then turns specific decision failures into small, testable repairs.
+
+## Competition overview
+
+The competition asks participants to build an AI agent that plays the Pokémon Trading Card Game in Kaggle's CABT simulation environment. Agents are evaluated through repeated games and ranked by a rating-based leaderboard. Results depend on policy quality, deck construction, opponent pool, matchmaking, game count, and the stochastic engine, so one submission rating is not a complete estimate of strength.
+
+This repository covers two connected deliverables:
+
+- **Simulation research:** candidate agents, 60-card decks, both-seat evaluation, and submission packaging for the [PTCG AI Battle Challenge Simulation](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle).
+- **Strategy writeup:** the documented analysis submitted to the [PTCG AI Battle Challenge Strategy](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy), with code shared in the [Kaggle discussion post](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741120).
+
+The final writeup reports two matched final-build submissions at **742.8** and **700.2**, with final placement **1,611 / 6,807 (top 24%)** at the recorded ladder cutoff. Five changes were tested; two were retained. The strongest evidence is behavioral: on 21,975 recorded decisions from 168 episodes, the retained repair produced 65 intended action changes and zero observed collateral changes. The local match tests did not establish a general win-rate improvement, so the writeup keeps that limitation explicit.
+
+## Repository map
+
+| Path | Purpose |
+|---|---|
+| `candidates/h036_tempo_boss/` | Final H036 agent and deck used in the strategy writeup |
+| `main.py`, `deck.csv` | Current root research baseline; use the candidate path above for the final H036 pair |
+| `scripts/evaluate.py` | Non-deterministic CABT evaluation from both seats |
+| `scripts/package_submission.py` | Validate and build a Kaggle submission archive |
+| `scripts/kaggle_ops.py` | Context synchronization, status checks, and guarded submission operations |
+| `scripts/curate_context.py` | Select and collect relevant Kaggle discussions and notebooks |
+| `research_loop/results.tsv` | Experiment result ledger |
+| `docs/ptcg/` | Competition facts, protocol, hypotheses, and submission notes |
+
+## Quick start
 
 ```bash
 uv sync
@@ -9,30 +37,33 @@ uv run python scripts/smoke_test.py
 uv run pytest -q
 ```
 
-핵심 흐름은 `외부 맥락 수집 → 가설 등록 → 후보 구현 → 반복 경기 평가 → 현재 best 승격 → 검증·패키징 → 승인 후 제출`입니다.
+Run a small two-seat evaluation with the documented candidate interface:
 
-- `main.py`, `deck.csv`: 현재 best와 기준 덱
-- `candidates/h###_slug/`: 가설별 `main.py + deck.csv`
-- `scripts/evaluate.py`: 비결정적 반복 경기 평가
-- `scripts/package_submission.py`: Kaggle용 `.tar.gz` 검증·생성
-- `scripts/kaggle_ops.py`: 읽기 작업과 확인 문구가 필요한 제출
-- `scripts/curate_context.py`: Discussion/Notebook 선별 및 원문 수집
-- `docs/ptcg/`: 대회 사실, 검증 규약, 가설, 제출 절차
-- `research_loop/results.tsv`: 실험 결과 원장
+```bash
+uv run python scripts/evaluate.py \
+  --candidate candidates/h036_tempo_boss \
+  --bundle smoke \
+  --workers 2
+```
 
-대회 데이터는 Competition Use Only이므로 `data/raw/`에만 두며 커밋하지 않습니다.
+Validate and package a candidate before submitting:
 
-## Omitted artifacts / 제외된 산출물
+```bash
+uv run python scripts/package_submission.py \
+  --source candidates/h036_tempo_boss \
+  --output submission.tar.gz
+```
 
-이 저장소는 대회 규칙 2.4.b.1(Competition Data 재배포 금지)과 3.6.b(Pokémon Elements 공개 금지)를
-지키기 위해, 리플레이에서 파생한 다음 산출물을 **커밋 히스토리에서 제거**했습니다.
+The local CABT engine is stochastic. Treat repeated runs, seat balance, sample size, and uncertainty as part of the result; do not infer causality from one game or one rating.
 
-| 경로 | 내용 | 재생성 |
-|---|---|---|
-| `candidates/*/meta_decks.json` | 상위 풀 리플레이에서 채굴한 타 참가자 덱 구성 + 경기 수 | `scripts/mine_episodes.py deck-stats` |
-| `research_loop/deck_*.json` | 개별 참가자 덱 스냅샷 | `scripts/mine_episodes.py extract` |
-| `docs/ptcg/writeup/trace_game.json` | 단일 경기 트레이스 | `scripts/evaluate.py` |
+## Data and omitted artifacts
 
-제출본(`main.py` + `deck.csv`)은 이 파일들을 참조하지 않으므로 그대로 실행됩니다. 탐색 계열 후보의
-`_load_meta_decks()`는 파일 부재 시 빈 리스트를 반환하므로 동작하되 상대 덱 사전(prior)만 비활성화됩니다.
-본인의 Competition Data로 위 명령을 실행하면 복원됩니다.
+Competition Data is for competition use only and is not redistributed here. Replay-derived participant deck snapshots, raw traces, and named-card metadata are omitted from the repository and its history. The final agent runs without them. When permitted, the analysis scripts can be regenerated with a participant's own local competition data; see `docs/ptcg/` for the corresponding commands.
+
+Pokémon card names, images, and other Pokémon Elements remain the property of their respective rights holders. This repository's original code and documentation are released under the [MIT License](LICENSE). The credited policy base is [Rozen's V10 notebook](https://www.kaggle.com/code/romanrozen/strong-start-baseline-agent-v10-lb-950).
+
+## Links
+
+- [Submitted strategy writeup](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1786172403257)
+- [Solution and evaluation code discussion](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741120)
+- [Competition](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle)
